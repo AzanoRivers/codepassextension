@@ -5,8 +5,8 @@ import { MESSAGE_ES } from '@utils/Message';
 
 export function SelectConfirmation({ cancel, confirm }) {
     const { deletePassword } = useToolsPassword();
-    const CANCEL_ACTION = cancel || (() => { console.log('Cancelando...') });
-    const CONFIRM_ACTION = confirm || (() => { console.log('Confirmando...') });
+    const CANCEL_ACTION = cancel || (() => { /* console.log('Cancelando...') */ });
+    const CONFIRM_ACTION = confirm || (() => { /* console.log('Confirmando...') */ });
 
     const handleDelete = (event) => {
         CONFIRM_ACTION();

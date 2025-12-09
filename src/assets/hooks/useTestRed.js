@@ -24,7 +24,7 @@ const useTestRed = () => {
                 signal: controller.signal
             }).then(response => {
                 if (response.status === 204) {
-                    console.log('CONNECTED!');
+                    // console.log('CONNECTED!');
                     setDataCodePass(data => ({ ...data, net: true, modalError: false }));
                 } else {
                     console.warn('SIN NET');

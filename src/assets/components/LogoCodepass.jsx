@@ -16,9 +16,9 @@ const LogoCodepass = ({ action }) => {
 
 
     const ACTION_TEST_DEV = () => {
-        console.log('[CODEPASS - log]: Dev');
-        console.log('LOGINSTATE: ', loginState);
-        console.log('DATACODEPASS: ', dataCodePass);
+        // console.log('[CODEPASS - log]: Dev');
+        // console.log('LOGINSTATE: ', loginState);
+        // console.log('DATACODEPASS: ', dataCodePass);
         ON_ACTION();
     }
 

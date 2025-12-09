@@ -8,10 +8,10 @@ const secreto = "mensaje ultra secreto";
 
 (async () => {
     const token = await encryptWithPassphrase(secreto, pass);
-    console.log("TOKEN (base64):", token);
+    // console.log("TOKEN (base64):", token);
 
     const original = await decryptWithPassphrase(token, pass);
-    console.log("PLANO:", original); // "mensaje ultra secreto"
+    // console.log("PLANO:", original); // "mensaje ultra secreto"
 })();
 */
 
@@ -129,7 +129,7 @@ export const go_to_encrypt = async ({ passwords = [], masterKey = "" }) => {
         }
         return encryptedPasswords;
     } catch (error) {
-        console.log("Error encrypting block password:", error);
+        // console.log("Error encrypting block password:", error);
         return [];
     }
 };

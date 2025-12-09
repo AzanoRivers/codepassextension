@@ -23,7 +23,7 @@ export function SelectView({ cancel, action }) {
     const [password, setPassword] = useState('');
     const elementRef = useRef(null);
     // [FUNCTIONS]
-    const CANCEL_ACTION = cancel || (() => { console.log('Cancelando...') });
+    const CANCEL_ACTION = cancel || (() => { /* console.log('Cancelando...') */ });
     const ACTION = action || (() => { });
     const handleCancel = () => {
         CANCEL_ACTION();
@@ -35,13 +35,13 @@ export function SelectView({ cancel, action }) {
                     navigator.clipboard.writeText(password).then(() => {
                         toast.success(MESSAGE_ES.display.copyPasswordOk, { position: 'bottom-center', duration: 1000, });
                     }).catch(err => {
-                        console.log('Error en Copy', err);
+                        // console.log('Error en Copy', err);
                     });
                 } else {
                     toast.error('Error en Copy', { position: 'bottom-center', duration: 2000, });
                 }
             } catch (error) {
-                console.log("Error decrypting password:", error);
+                // console.log("Error decrypting password:", error);
                 return null;
             }
         };
@@ -60,7 +60,7 @@ export function SelectView({ cancel, action }) {
                     const decrypted = await decryptWithPassphrase(password, TIME_TOKEN.temporalsesionpass);
                     setPassword(decrypted || '');
                 } catch (error) {
-                    console.log("Error decrypting password:", error);
+                    // console.log("Error decrypting password:", error);
                     setPassword('');
                 }
             };

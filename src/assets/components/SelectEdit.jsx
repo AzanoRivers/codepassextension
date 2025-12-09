@@ -13,8 +13,8 @@ export function SelectEdit({ cancel, confirm, dataName }) {
     const [successPassword, setSuccessPassword] = useState(false);
     const inputRef = useRef(null);
     // [FUNCTIONS]
-    const CANCEL_ACTION = cancel || (() => { console.log('Cancelando...') });
-    const CONFIRM_ACTION = confirm || (() => { console.log('Confirmando...') });
+    const CANCEL_ACTION = cancel || (() => { /* console.log('Cancelando...') */ });
+    const CONFIRM_ACTION = confirm || (() => { /* console.log('Confirmando...') */ });
     const handleEdit = () => {
         // Validamos que el input tenga valor valido
         if (inputChanged.length === 0) {

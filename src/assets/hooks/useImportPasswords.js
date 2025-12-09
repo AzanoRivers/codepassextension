@@ -30,11 +30,11 @@ const useImportPasswords = () => {
     // [FUNCTIONS]
     const fileToString = async (file) => {
         if (!file || file.type !== 'text/plain') {
-            console.log('Invalid file type');
+            // console.log('Invalid file type');
             return ('Invalid file type');
         }
         if (onLoadImportFile) {
-            console.log('File is already being imported');
+            // console.log('File is already being imported');
             return ('File is already being imported');
         }
         setOnLoadImportFile(true);
@@ -51,7 +51,7 @@ const useImportPasswords = () => {
             
             if (temporalsesionpass && blockdatapass) {
                 // Hay blockpass activo - cifrar passwords con temporalsesionpass
-                console.log('Importando con blockpass activo - cifrando passwords');
+                // console.log('Importando con blockpass activo - cifrando passwords');
                 const encryptedPasswords = await go_to_encrypt({ 
                     passwords: NEW_PASSWORDS_DATA, 
                     masterKey: temporalsesionpass 
@@ -64,7 +64,7 @@ const useImportPasswords = () => {
                 }, 500);
             } else {
                 // No hay blockpass - importar sin cifrar
-                console.log('Importando sin blockpass - passwords sin cifrar');
+                // console.log('Importando sin blockpass - passwords sin cifrar');
                 updatePasswords(NEW_PASSWORDS_DATA);
                 
                 // Sincronizar con Drive
@@ -84,10 +84,10 @@ const useImportPasswords = () => {
             const asyncImport = async () => {
                 try {
                     setIsEncrypting(true); // Activar bandera para evitar re-ejecución
-                    console.log(dataPasswordFile);
+                    // console.log(dataPasswordFile);
                     const TEMPORAL_IMPORT_PASSWORD = await chrome.storage.local.get('temporalimportpass');
                     const NEW_PASSWORDS_DATA = await TRANSFORM_ENCODED_TO_DATA({ encodedData: dataPasswordFile, passphrase: (TEMPORAL_IMPORT_PASSWORD?.temporalimportpass || '') });
-                    console.log('RESPONSE NEW PASSWORDS DATA: ', NEW_PASSWORDS_DATA);
+                    // console.log('RESPONSE NEW PASSWORDS DATA: ', NEW_PASSWORDS_DATA);
                     if (NEW_PASSWORDS_DATA?.error) {
                         setErrorStatus(true);
                         // Limpiar temporalimportpass en caso de error
@@ -137,7 +137,7 @@ const useImportPasswords = () => {
                         // 7. Limpiar temporalimportpass después de todo el proceso
                         chrome.storage.local.remove('temporalimportpass');
                         
-                        console.log('Proceso de encriptación completado exitosamente');
+                        // console.log('Proceso de encriptación completado exitosamente');
                         
                         // 8. Sincronizar con Drive después de importar
                         setTimeout(() => {

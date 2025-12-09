@@ -34,7 +34,7 @@ const useToolsPassword = () => {
                         syncPasswordsToDrive();
                     }, 500);
                 } else {
-                    console.log('NO HAY PASSWORD PARA ELIMINAR');
+                    // console.log('NO HAY PASSWORD PARA ELIMINAR');
                 }
             } else {
                 console.warn("No se encontró ningún ancestro con [data-name].");
@@ -49,7 +49,7 @@ const useToolsPassword = () => {
         const { namekey, newPassword } = params;
         // Actualiza la contraseña de un password existente
         if (!namekey || !newPassword) {
-            console.log('setPassword: Nombre o nueva contraseña no proporcionados');
+            // console.log('setPassword: Nombre o nueva contraseña no proporcionados');
             return;
         }
         updatePasswordByName({ namekey, newPassword });
@@ -82,7 +82,7 @@ const useToolsPassword = () => {
         const { namekey, status } = params;
         // Actualiza el estado de bloqueo de una contraseña
         if (!namekey) {
-            console.log('setBlockPassword: Nombre no proporcionado');
+            // console.log('setBlockPassword: Nombre no proporcionado');
             return;
         }
         blockPassword({ namekey, status });

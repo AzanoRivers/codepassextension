@@ -33,8 +33,8 @@ const CodePassProvider = ({ children }) => {
     const [dataCodePass, setDataCodePass] = useState({ ...data });
     const updatePasswords = (newPasswords) => {
         if (!Array.isArray(newPasswords)) {
-            console.log('updatePasswords: El valor debe ser un array');
-            console.log('INTENTANDO ACTUALIZAR CON:', newPasswords);
+            // console.log('updatePasswords: El valor debe ser un array');
+            // console.log('INTENTANDO ACTUALIZAR CON:', newPasswords);
             return;
         }
         setDataCodePass(prevData => ({
@@ -47,9 +47,9 @@ const CodePassProvider = ({ children }) => {
         });
     };
     const updateAllPasswords = (newPasswords) => {
-        console.log('Proceso updateAllPasswords');
+        // console.log('Proceso updateAllPasswords');
         if (!Array.isArray(newPasswords)) {
-            console.log('updateAllPasswords: El valor debe ser un array');
+            // console.log('updateAllPasswords: El valor debe ser un array');
             return;
         }
         setDataCodePass(prevData =>
@@ -62,7 +62,7 @@ const CodePassProvider = ({ children }) => {
     };
     const initPasswords = (newPasswords) => {
         if (!Array.isArray(newPasswords)) {
-            console.log('initPasswords: El valor debe ser un array');
+            // console.log('initPasswords: El valor debe ser un array');
             return;
         }
         setDataCodePass(prevData => ({
@@ -78,7 +78,7 @@ const CodePassProvider = ({ children }) => {
                         chrome.storage.local.remove("manualunblockpass", () => {
                             chrome.storage.local.remove("temporalsesionpass", () => {
                                 chrome.storage.local.remove("masterkey", () => {
-                                    console.log("Session disconnected");
+                                    // console.log("Session disconnected");
                                 });
                             });
                         });

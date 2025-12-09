@@ -42,7 +42,7 @@ const ModalGeneric = ({ show, mode, type, children, buttonText, action, overacti
         if (action) {
             action();
         } else {
-            console.log('No action defined in ModalGeneric');
+            // console.log('No action defined in ModalGeneric');
         }
     };
     const actionOverBack = (event) => {
@@ -51,7 +51,7 @@ const ModalGeneric = ({ show, mode, type, children, buttonText, action, overacti
             if (overaction) {
                 overaction();
             } else {
-                console.log('Overaction No action defined in ModalGeneric');
+                // console.log('Overaction No action defined in ModalGeneric');
             }
         }
     }

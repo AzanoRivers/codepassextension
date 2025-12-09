@@ -76,7 +76,7 @@ export const ModalPort = () => {
     }, [setErrorStatus]);
     const onExportPasswords = () => {
         // Lógica para exportar passwords
-        console.log('Exportando...');
+        // console.log('Exportando...');
         if (exportWithBlock) {
             if (!inputBlockPhrase) {
                 toast.error(MESSAGE_ES.modalport.errorblockphrase, { position: 'bottom-center', duration: 3000, });

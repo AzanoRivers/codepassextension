@@ -17,7 +17,7 @@ export const ModalRequired = () => {
     // [FUNCTIONS]
     const onUnlockPasswords = () => {
         // Aquí se debería validar la frase de bloqueo y desbloquear las passwords
-        console.log('onUnlockPasswords');
+        // console.log('onUnlockPasswords');
         if (inputBlockPhrase === '' || !inputBlockPhrase) {
             toast.error(MESSAGE_ES.modalrequired.invalidphrase, { position: 'bottom-center', duration: 3000 });
             return;
@@ -26,16 +26,16 @@ export const ModalRequired = () => {
         // Detectar si viene de Drive o Import
         const isDriveFile = dataCodePass.onDriveFile;
         
-        console.log('isDriveFile:', isDriveFile);
+        // console.log('isDriveFile:', isDriveFile);
         
         if (isDriveFile) {
-            console.log('Guardando temporaldrivepass');
+            // console.log('Guardando temporaldrivepass');
             chrome.storage.local.set({ temporaldrivepass: inputBlockPhrase }, () => {
-                console.log('temporaldrivepass guardado');
+                // console.log('temporaldrivepass guardado');
             });
             // Ya está en true, no necesitamos setOnDriveFile(true) aquí
         } else {
-            console.log('Guardando temporalimportpass');
+            // console.log('Guardando temporalimportpass');
             chrome.storage.local.set({ temporalimportpass: inputBlockPhrase });
             setOnImportFile(true);
         }
