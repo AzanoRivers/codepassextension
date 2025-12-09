@@ -26,6 +26,15 @@ jspm_packages/
 *.sln
 *.sw?
 
+# jetbrains setting folder
+.idea/
+# generated types
+.astro/
+
+# build output
+dist/
+
+
 ### VirtualEnv ###
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
@@ -262,3 +271,4 @@ lerna-debug.log*
 ### BUILD ###
 **/build/*
 build/*
+build
