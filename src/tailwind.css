@@ -1,0 +1,394 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+:root {
+    --DarkBlue: #002140;
+    --DarkBlue70: rgba(0, 33, 64, .7);
+    --Blue-Ligth: #00C2FF;
+    --Blue-Ligth-16: rgba(0, 194, 255, .16);
+    --Blue-Ligth-20: rgba(0, 194, 255, .2);
+    --Blue-Ligth-50: rgba(0, 194, 255, .5);
+    --Blue-CodeLabs: rgb(51, 79, 255);
+    --Blue-Ligth50: rgba(0, 194, 255, .5);
+    --Blue-Ligth25: rgba(0, 194, 255, .25);
+    --Purple: #531FA7;
+    --Purple70: rgba(30, 30, 30, .7);
+    --GreenLight: #00FF0A;
+    --GreenDark: #008300;
+    --Red: #991121;
+    --Yellow: #dea30e;
+    --Orange: #DE8500;
+    --White: #d1d1d1;
+    --White-80: rgba(255, 255, 255, 0.8);
+    --White-90: rgba(255, 255, 255, 0.9);
+    --Modal: #003D75;
+    --Modal-50: rgba(0, 61, 117, .5);
+    --Modal-80: rgba(0, 61, 117, .8);
+    --Modal-90: rgba(0, 61, 117, .9);
+    /* Colores Arcoiris LGBT+ */
+    --Rainbow-Red: #E40303;
+    --Rainbow-Orange: #FF8C00;
+    --Rainbow-Yellow: #FFED00;
+    --Rainbow-Green: #008026;
+    --Rainbow-Blue: #24408E;
+    --Rainbow-Purple: #732982;
+}
+
+html {
+    @apply transition-colors duration-500 ease-in-out;
+}
+
+body {
+    @apply transition-colors duration-500 ease-in-out;
+}
+
+/* UserSelect */
+.no-select {
+    user-select: none; /* Para navegadores modernos */
+}
+
+.no-action-pointer {
+    pointer-events: none;
+    user-select: none;
+}
+
+/* SCROLLBARS */
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background: var(--Blue-Ligth25);
+    border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--Blue-Ligth50);
+    border-radius: 10px;
+    border: 1px solid var(--Blue-Ligth);
+}
+
+.scroll-invisible {
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+  }
+  
+  .scroll-invisible::-webkit-scrollbar {
+    display: none;
+  }
+
+/* FONTS */
+.font-orbitron-title {
+    font-family: "Orbitron", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+
+.font-orbitron-normal {
+    font-family: "Orbitron", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.font-barlownormal {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.font-barlow-bold {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.semiboldhover-span:hover span {
+    @apply font-bold;
+}
+
+/* SHADOWS */
+.separator-shadow {
+    box-shadow:
+        0 0 2px 0 rgba(0, 0, 0, 0.8),
+        0 0 6px 0 var(--Blue-Ligth50);
+}
+
+.generic-shadow {
+    box-shadow:
+        inset 0 0 4px 2px rgba(0, 0, 0, 0.25),
+        0 0 4px 1px var(--Blue-Ligth50);
+}
+
+/* BG */
+.bg-white-1 {
+    background-color: var(--White);
+}
+
+.bg-lightblue {
+    background-color: var(--Blue-Ligth);
+}
+
+.bg-lightblue-50 {
+    background-color: var(--Blue-Ligth-50);
+}
+
+.bg-lightblue-16 {
+    background-color: var(--Blue-Ligth-16);
+}
+
+.bg-codelabs {
+    background-color: var(--Blue-CodeLabs);
+}
+
+.bg-darkblue {
+    background-color: var(--DarkBlue);
+}
+
+.bg-darkblue70 {
+    background-color: var(--DarkBlue70);
+}
+
+.bg-red {
+    background-color: var(--Red);
+}
+
+.bg-greenlight {
+    background-color: var(--GreenLight);
+}
+
+.bg-greendark {
+    background-color: var(--GreenDark);
+}
+
+.bg-yellow {
+    background-color: var(--Yellow);
+}
+
+.bg-modal {
+    background-color: var(--Modal);
+}
+
+.bg-modal-50 {
+    background-color: var(--Modal-50);
+}
+
+.bg-modal-80 {
+    background-color: var(--Modal-80);
+}
+
+.bg-modal-90 {
+    background-color: var(--Modal-90);
+}
+
+.bg-arcoiris {
+    background: linear-gradient(
+        90deg,
+        var(--Rainbow-Red),
+        var(--Rainbow-Orange),
+        var(--Rainbow-Yellow),
+        var(--Rainbow-Green),
+        var(--Rainbow-Blue),
+        var(--Rainbow-Purple)
+    );
+    background-size: 400% 100%;
+    animation: rainbow-gradient 4s ease infinite;
+}
+
+@keyframes rainbow-gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.grid-pattern-bg {
+    background-image:
+      linear-gradient(to right, var(--Blue-Ligth-20) 2px, transparent 2px),
+      linear-gradient(to bottom, var(--Blue-Ligth-20) 2px, transparent 2px);
+    background-size: 32px 32px;
+    background-repeat: repeat;
+    background-position: top left;
+    z-index: 0;
+}
+
+/* COLORS */
+.white-1 {
+    color: var(--White);
+}
+
+.color-blue-codepass {
+    color: var(--Blue-CodeLabs);
+}
+
+/* BORDER */
+.border-action {
+    border: 2px solid var(--Blue-Ligth);
+    border-radius: 4px;
+}
+
+.border-action-nobottom {
+    border-top: 2px solid var(--Blue-Ligth);
+    border-left: 2px solid var(--Blue-Ligth);
+    border-right: 2px solid var(--Blue-Ligth);
+    border-bottom: none;
+    border-radius: 4px;
+}
+
+.border-action-left {
+    border-left: 2px solid var(--Blue-Ligth-50);
+}
+
+.border-action-right {
+    border-right: 2px solid var(--Blue-Ligth-50);
+}
+
+.border-warn {
+    border: 2px solid var(--Orange);
+    border-radius: 4px;
+}
+
+.border-success {
+    border: 2px solid var(--GreenLight);
+    border-radius: 4px;
+}
+
+.border-error {
+    border: 2px solid var(--Red);
+    border-radius: 4px;
+}
+
+/* BUTTON 3 BORDERS*/
+.multi-border-button {
+    position: relative;
+    border: 2px solid var(--Blue-Ligth);
+    border-radius: 8px;
+}
+
+.multi-border-button::before,
+.multi-border-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.multi-border-button::before {
+    /* Second border */
+    border: 2px solid var(--White);
+    border-radius: 8px;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+}
+
+.multi-border-button::after {
+    /* Third border */
+    border: 2px solid var(--Purple);
+    border-radius: 8px;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+}
+
+.border-top-blue {
+    border-top: 2px solid var(--Blue-Ligth);
+}
+
+.border-bottom-blue {
+    border-bottom: 2px solid var(--Blue-Ligth);
+}
+.border-left-blue {
+    border-left: 2px solid var(--Blue-Ligth);
+}
+.border-lightblue {
+    border: 2px solid var(--Blue-Ligth);
+}
+/* BOX */
+.flex-center {
+    @apply flex justify-center items-center;
+}
+/* Clases personalizadas */
+.min-wh-custom {
+    /* W y H minimos para vista correcta de la extension */
+    min-width: 22rem;
+    min-height: 36rem;
+    max-width: 370px;
+    max-height: 430px;
+    overflow-y: hidden;
+}
+.h-10p {
+    height: 10%;
+}
+
+.h-15p {
+    height: 15%;
+}
+.h-35p {
+    height: 35%;
+}
+.h-95 {
+    height: 95%;
+}
+.w-30p {
+    width: 30%;
+}
+.w-70p {
+    width: 70%;
+}
+.w-95p {
+    width: 95%;
+}
+/* INPUT */
+.input-codepass {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px dotted var(--Blue-Ligth-16);
+}
+.input-codepass:focus {
+    outline: none;
+    border-bottom: 2px dotted var(--Blue-Ligth);
+}
+
+.input-codepass::placeholder {
+    color: var(--White-90);
+    opacity: 0.8;
+}
+
+/* ViewTransition */
+::view-transition-group(root) {
+    animation-duration: 0.5s;
+}
+
+/* animación de pulso obligatorio - mantiene centrado el modal */
+.pulse-mandatory {
+    animation: pulse-mandatory 300ms ease-in-out 1;
+}
+@keyframes pulse-mandatory {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
