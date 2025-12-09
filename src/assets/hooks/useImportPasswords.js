@@ -24,9 +24,10 @@ const useImportPasswords = () => {
     const [errorStatus, setErrorStatus] = useState(false);
     const [isEncrypting, setIsEncrypting] = useState(false); // Bandera para evitar bucle
     const { toggleModalRequired } = useModalRequired();
-    const { syncPasswordsToDrive } = useSyncDrive();
     // [CONTEXTS]
-    const { dataCodePass, updatePasswords, setOnImportFile, setPassBlock, updateAllPasswords, setBlockPasswords, setManualUnblockPass } = useContext(CodePassContext);
+    const context = useContext(CodePassContext);
+    const { dataCodePass, updatePasswords, setOnImportFile, setPassBlock, updateAllPasswords, setBlockPasswords, setManualUnblockPass } = context;
+    const { syncPasswordsToDrive } = useSyncDrive(context);
     // [FUNCTIONS]
     const fileToString = async (file) => {
         if (!file || file.type !== 'text/plain') {

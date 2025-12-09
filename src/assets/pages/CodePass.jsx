@@ -58,6 +58,7 @@ const CodePass = () => {
             console.warn('Error de Conexión');
         }
     }, [shouldTryConnection, connect, dataCodePass.net, dataCodePass.modalError, setConnect]);
+    
     useEffect(() => {
         // Oculta el input si el bloqueo de passwords está activo
         if (dataCodePass.blockpasswords) {
@@ -224,7 +225,7 @@ const CodePass = () => {
             {/* MODAL */}
             {
                 (!dataCodePass.net && !skeleton) &&
-                <ModalGeneric action={() => { setLogin(false); }} show={dataCodePass.modalError} mode="middle" type="info" text="Reintentar">
+                <ModalGeneric action={() => { setLogin(false); }} show={dataCodePass.modalError} mode="middle" type="error" text="Reintentar">
                     <header className="flex-center flex-col h-3/5 w-full">
                         <IconRobotX ww="150" />
                         <h3 className="font-orbitron-title text-3xl">Error</h3>

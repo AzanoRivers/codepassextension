@@ -68,7 +68,7 @@ codepass-extension/
 - **`useLogin`**: Gestión de autenticación
 - **`useModalLock`**: Control de modal de bloqueo
 - **`useModalBlockpass`**: Control de modal de contraseña maestra
-- **`useTestRed`**: Verificación de conexión a internet
+- **`useTestRed`**: Verificación de conexión a internet usando `navigator.onLine` (sin peticiones HTTP externas)
 - **`useCodePassData`**: Acceso a datos de contraseñas
 - **`useSetPassblock`**: Configuración de bloqueo de contraseñas
 - **`useFilterPass`**: Filtrado y búsqueda de contraseñas
@@ -381,16 +381,21 @@ npm run preview
   "manifest_version": 3,
   "name": "CodePass",
   "version": "1.0",
-  "description": "Gestión libre de Passwords",
+  "description": "Simple and modern password management",
   "permissions": [
-    "scripting",
-    "storage", 
-    "cookies",
-    "identity",
-    "activeTab"
+    "storage",
+    "identity"
   ]
 }
 ```
+
+**Permisos Mínimos:**
+- ✅ **`storage`**: Almacenamiento local de tokens y datos cifrados
+- ✅ **`identity`**: Autenticación OAuth con Google
+- ❌ **`scripting`**: Removido (no se inyecta código en páginas web)
+- ❌ **`cookies`**: Removido (no se accede a cookies)
+- ❌ **`activeTab`**: Removido (no se interactúa con contenido de pestañas)
+- ❌ **`host_permissions`**: Removido (no se accede a contenido de páginas web)
 
 ### **Vite Configuration**
 El proyecto utiliza aliases para imports limpos:
@@ -407,11 +412,13 @@ El proyecto utiliza aliases para imports limpos:
 
 ## 🔒 Seguridad
 
-- **Almacenamiento Encriptado**: Las contraseñas se almacenan de forma segura
+- **Almacenamiento Encriptado**: Las contraseñas se almacenan de forma segura con AES-GCM 256-bit
+- **Derivación de Claves PBKDF2**: 310,000 iteraciones con SHA-256
 - **Autenticación OAuth**: Integración con Google OAuth
 - **Validación de Entrada**: Sanitización de todos los inputs
 - **CSP (Content Security Policy)**: Configurado para máxima seguridad
-- **Permissions Mínimas**: Solo los permisos necesarios para funcionar
+- **Permisos Mínimos**: Solo `storage` e `identity` - sin acceso a contenido de páginas web
+- **Sin Peticiones Externas**: Verificación de conexión mediante `navigator.onLine` nativo
 
 ## 📄 Licencia
 
@@ -492,7 +499,7 @@ codepass-extension/
 #### **🎯 Custom Hooks**
 - **`useLogin`**: Authentication management
 - **`useModalLock`**: Lock modal control
-- **`useTestRed`**: Internet connection verification
+- **`useTestRed`**: Internet connection verification using `navigator.onLine` (no external HTTP requests)
 - **`useCodePassData`**: Password data access
 - **`useSetPassblock`**: Password lock configuration
 - **`useToolsPassword`**: Password manipulation tools
@@ -755,7 +762,9 @@ npm run build-watch
 - **PBKDF2 Key Derivation**: 310,000 iterations with SHA-256
 - **OAuth Authentication**: Google OAuth integration
 - **Input Validation**: Sanitization of all inputs
-- **Minimal Permissions**: Only necessary permissions to function
+- **Minimal Permissions**: Only `storage` and `identity` - no access to web page content
+- **No External Requests**: Connection verification using native `navigator.onLine`
+- **CSP (Content Security Policy)**: Configured for maximum security
 
 ## 📄 License
 

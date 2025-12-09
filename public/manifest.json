@@ -4,18 +4,12 @@
     "version": "1.0",
     "description": "Simple and modern password management",
     "permissions": [
-        "scripting",
         "storage",
-        "cookies",
-        "identity",
-        "activeTab"
+        "identity"
     ],
     "background": {
         "service_worker": "background.js"
     },
-    "host_permissions": [
-        "<all_urls>"
-    ],
     "action": {
         "default_popup": "index.html",
         "default_icon": {

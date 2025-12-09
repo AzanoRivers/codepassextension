@@ -7,12 +7,13 @@
 */
 
 import { MESSAGE_ES } from '@utils/Message';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import { IconRandom } from '@icons/IconRandom';
 import { IconEye } from '@icons/IconEye';
 import { useCodePass } from '@hooks/useCodePassData';
 import { useTestRed } from '@hooks/useTestRed';
 import { useSyncDrive } from '@hooks/useSyncDrive';
+import { CodePassContext } from '@contexts/CodepassContext';
 import randomPhrase from '@utils/randomPhrase';
 import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
@@ -35,7 +36,8 @@ const InputCodepass = ({ onFocus }) => {
     const [placeholderState, setPlaceholderState] = useState(MESSAGE_ES.input.placeholder);
     const [createPassword, setCreatePassword] = useState(false);
     const [, updatePasswords] = useCodePass();
-    const { syncPasswordsToDrive } = useSyncDrive();
+    const context = useContext(CodePassContext);
+    const { syncPasswordsToDrive } = useSyncDrive(context);
     let onFocusFunction = onFocus || (() => console.warn('onFocus no es una función válida'));
     if (typeof onFocus !== 'function') {
         onFocusFunction = () => console.warn('onFocus no es una función válida');

@@ -19,6 +19,7 @@ const data = {
     modal: false,
     modalLock: false,
     modalPort: false,
+    modalError: false,
     datapasswords: [],
     blockpasswords: false,
     passblock: '',

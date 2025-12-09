@@ -8,8 +8,9 @@ const useToolsPassword = () => {
     const [confirmEdit, setConfirmEdit] = useState(false);
     const [confirmView, setConfirmView] = useState(false);
     const [blockConfirm, setBlockConfirm] = useState(false);
-    const { removePasswordContext, updatePasswordByName, blockPassword, getPassBlock } = useContext(CodePassContext);
-    const { syncPasswordsToDrive } = useSyncDrive();
+    const context = useContext(CodePassContext);
+    const { removePasswordContext, updatePasswordByName, blockPassword, getPassBlock } = context;
+    const { syncPasswordsToDrive } = useSyncDrive(context);
     // [FUNCTIONS]
     const setDeleteConfirmation = (value) => {
         // Activamos o desactivamos la confirmacion de borrado

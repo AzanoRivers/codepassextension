@@ -2,24 +2,28 @@
  * @hook useSyncDrive
  * @description Hook para sincronizar automáticamente las passwords con Google Drive.
  * Se encarga de cifrar las passwords con la masterKey y subirlas al Drive.
+ * Verifica la conexión a internet antes de sincronizar y maneja errores de red.
  * 
+ * @param {Object} context - Contexto de CodePass para manejar estados de error
  * @returns {Object} Funciones para sincronización
  * @returns {Function} syncPasswordsToDrive - Sincroniza passwords al Drive
  * @returns {boolean} isSyncing - Estado de sincronización en progreso
  * 
  * Flujo de sincronización:
- * 1. Obtiene masterKey del storage local
- * 2. Descifra passwords actuales con temporalsesionpass
- * 3. Convierte a formato de exportación
- * 4. Cifra con masterKey (usando misma lógica que exportación)
- * 5. Sube a Drive en formato <<<cpbh5:ENCRYPTED_DATA>>>
+ * 1. Verifica conexión a internet con navigator.onLine
+ * 2. Obtiene masterKey del storage local
+ * 3. Descifra passwords actuales con temporalsesionpass
+ * 4. Convierte a formato de exportación
+ * 5. Cifra con masterKey (usando misma lógica que exportación)
+ * 6. Sube a Drive en formato <<<cpbh5:ENCRYPTED_DATA>>>
+ * 7. Si hay error de red, muestra modal de error y resetea sesión
  */
 
 import { useState, useCallback } from 'react';
 import { decryptWithPassphrase, encryptWithPassphrase, deriveMasterKey } from '@utils/EncodePayload';
 import { TRANSFORM_DATA_TO_ENCODED } from '@utils/transformDataToPasswords';
 
-const useSyncDrive = () => {
+const useSyncDrive = (context = null) => {
     const [isSyncing, setIsSyncing] = useState(false);
 
     /**
@@ -29,6 +33,15 @@ const useSyncDrive = () => {
     const syncPasswordsToDrive = useCallback(async () => {
         if (isSyncing) {
             // console.log('Sincronización ya en progreso');
+            return false;
+        }
+
+        // Verificar conexión a internet antes de intentar sincronizar
+        if (!navigator.onLine) {
+            console.warn('Sin conexión a internet - no se puede sincronizar');
+            if (context?.setDataCodePass) {
+                context.setDataCodePass(data => ({ ...data, net: false, modalError: true }));
+            }
             return false;
         }
 
@@ -108,6 +121,12 @@ const useSyncDrive = () => {
                             if (chrome.runtime.lastError) {
                                 console.error('Error en chrome.runtime:', chrome.runtime.lastError);
                                 setIsSyncing(false);
+                                
+                                // Manejar error de red - solo actualizar estado
+                                if (context?.setDataCodePass) {
+                                    context.setDataCodePass(data => ({ ...data, net: false, modalError: true }));
+                                }
+                                
                                 resolve(false);
                                 return;
                             }
@@ -119,6 +138,17 @@ const useSyncDrive = () => {
                             } else {
                                 console.error('Error sincronizando con Drive:', response?.error);
                                 setIsSyncing(false);
+                                
+                                // Si el error contiene "fetch" o "network", es un error de conexión
+                                const isNetworkError = response?.error?.toLowerCase().includes('fetch') || 
+                                                      response?.error?.toLowerCase().includes('network') ||
+                                                      response?.error?.toLowerCase().includes('failed to fetch') ||
+                                                      response?.error?.toLowerCase().includes('token requerido');
+                                
+                                if (isNetworkError && context?.setDataCodePass) {
+                                    context.setDataCodePass(data => ({ ...data, net: false, modalError: true }));
+                                }
+                                
                                 resolve(false);
                             }
                         }
@@ -133,9 +163,19 @@ const useSyncDrive = () => {
         } catch (error) {
             console.error('Error en sincronización con Drive:', error);
             setIsSyncing(false);
+            
+            // Manejar error de red en el catch
+            const isNetworkError = error.message?.toLowerCase().includes('fetch') || 
+                                  error.message?.toLowerCase().includes('network') ||
+                                  !navigator.onLine;
+            
+            if (isNetworkError && context?.setDataCodePass) {
+                context.setDataCodePass(data => ({ ...data, net: false, modalError: true }));
+            }
+            
             return false;
         }
-    }, [isSyncing]);
+    }, [isSyncing, context]);
 
     return {
         syncPasswordsToDrive,

@@ -1,9 +1,8 @@
 /**
  * @hook useTestRed
- * @description Hook personalizado que verifica si hay conexión a internet real usando el endpoint público de Google.
+ * @description Hook personalizado que verifica si hay conexión a internet usando navigator.onLine.
  * @description Modifica el contexto <CodePassContext> cambiando los valores de `net` y `modalError` según el resultado.
  * @description Se activa únicamente cuando `connect` es true. Al terminar, restablece `connect` a false para evitar loops.
- * @description Utiliza `AbortController` para cancelar la petición en caso de desmontaje o reinicio del hook.
  * @returns {[boolean, Function]} - Devuelve un array con el estado [connect] y una función [setConnect] para iniciar la verificación.
  * @example
  * const [connect, setConnect] = useTestRed();
@@ -18,27 +17,39 @@ const useTestRed = () => {
 
     useEffect(() => {
         if (connect) {
-            const controller = new AbortController();
-            fetch('https://clients3.google.com/generate_204', {
-                method: 'GET',
-                signal: controller.signal
-            }).then(response => {
-                if (response.status === 204) {
-                    // console.log('CONNECTED!');
-                    setDataCodePass(data => ({ ...data, net: true, modalError: false }));
-                } else {
-                    console.warn('SIN NET');
-                    setDataCodePass(data => ({ ...data, net: false, modalError: true }));
-                }
-                setConnect(false);
-            }).catch(() => {
-                console.warn('ERROR DE RED');
+            // Verificar estado de conexión usando navigator.onLine
+            const isOnline = navigator.onLine;
+            
+            if (isOnline) {
+                // console.log('CONNECTED!');
+                setDataCodePass(data => ({ ...data, net: true, modalError: false }));
+            } else {
+                console.warn('SIN CONEXIÓN');
                 setDataCodePass(data => ({ ...data, net: false, modalError: true }));
-                setConnect(false);
-            });
-            return () => controller.abort();
+            }
+            
+            setConnect(false);
         }
     }, [connect, setDataCodePass]);
+
+    // Listeners para cambios de conexión
+    useEffect(() => {
+        const handleOnline = () => {
+            setDataCodePass(data => ({ ...data, net: true, modalError: false }));
+        };
+        
+        const handleOffline = () => {
+            setDataCodePass(data => ({ ...data, net: false, modalError: true }));
+        };
+
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
+    }, [setDataCodePass]);
 
     return [connect, setConnect];
 };
