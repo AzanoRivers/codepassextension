@@ -1,20 +1,32 @@
 # 🔐 CodePass Extension
 
-**Extensión de navegador para gestión de contraseñas**
+**Extensión de navegador para gestión de contraseñas** | **Browser extension for password management**
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/azanoRivers/codepass-extension)
 [![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.3.1-646cff.svg)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4.4-38bdf8.svg)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-Custom-orange.svg)](#-licencia--license)
+
+---
+
+### 🌐 Language / Idioma
+
+**[🇪🇸 Español](#español)** | **[🇬🇧 English](#english)**
+
+---
+
+<a name="español"></a>
+## 🇪🇸 ESPAÑOL
 
 ## 📋 Descripción
 
-CodePass es una extensión de navegador Chrome que proporciona una interfaz moderna y segura para la gestión de contraseñas almacenadas en google drive. Construida con React 18, Vite y TailwindCSS, ofrece una experiencia de usuario fluida y características avanzadas de seguridad.
+CodePass es una extensión de navegador Chrome que proporciona una interfaz moderna y segura para la gestión de contraseñas almacenadas en google drive (no se almacenan datos en servidores externos). Construida con React 18, Vite y TailwindCSS, ofrece una experiencia de usuario fluida, moderna, minimalista y características de seguridad eficaces.
 
 ## ✨ Características Principales
 
 - 🔒 **Gestión Segura de Contraseñas**: Almacenamiento y organización de credenciales
-- 🚀 **Interfaz Moderna**: UI construida con React y TailwindCSS
+- 🚀 **Interfaz Moderna**: UI construida con React y TailwindCSS. Diseño de UI by AzanoLabs / AzanoRivers.
 - 🔐 **Sistema de Bloqueo**: Protección adicional con contraseña maestra
 - 📱 **Responsive Design**: Adaptable a diferentes tamaños de ventana
 - 🎨 **Modo Oscuro**: Interfaz optimizada para trabajar en cualquier momento
@@ -369,7 +381,7 @@ npm run preview
   "manifest_version": 3,
   "name": "CodePass",
   "version": "1.0",
-  "description": "Gestión de passwords para CodeLabs",
+  "description": "Gestión libre de Passwords",
   "permissions": [
     "scripting",
     "storage", 
@@ -403,10 +415,163 @@ El proyecto utiliza aliases para imports limpos:
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
+**Licencia Personalizada de Uso Educativo y No Comercial**
+
+Este software es de código abierto con las siguientes condiciones:
+
+### ✅ Permitido:
+- ✅ Uso personal y educativo gratuito
+- ✅ Estudiar, aprender y modificar el código
+- ✅ Distribuir versiones modificadas (forks) con crédito al autor original
+- ✅ Contribuir con mejoras mediante Pull Requests
+
+### ❌ Prohibido:
+- ❌ Uso comercial directo (vender la extensión tal cual)
+- ❌ Uso comercial con modificaciones mínimas (copia con cambios superficiales)
+- ❌ Distribución con intenciones maliciosas (malware, phishing, etc.)
+- ❌ Eliminar o modificar los créditos del autor original
+
+**Nota Legal:** Cualquier distribución debe mantener esta licencia y dar crédito a **AzanoRivers / Andrés Rivera** como autor original. El uso comercial requiere autorización expresa del autor.
+
+Para solicitudes comerciales, contactar a: [GitHub @AzanoRivers](https://github.com/AzanoRivers)
 
 ## 👥 Equipo
 
 Desarrollado por **AzanoRivers - Andrés Rivera** con ❤️
+
+---
+
+<a name="english"></a>
+## 🇬🇧 ENGLISH
+
+## 📋 Description
+
+CodePass is a Chrome browser extension that provides a modern and secure interface for password management stored in Google Drive (no data is stored on external servers). Built with React 18, Vite and TailwindCSS, it offers a fluid, modern, minimalist user experience with effective security features.
+
+## ✨ Main Features
+
+- 🔒 **Secure Password Management**: Storage and organization of credentials
+- 🚀 **Modern Interface**: UI built with React and TailwindCSS. UI Design by AzanoLabs / AzanoRivers.
+- 🔐 **Lock System**: Additional protection with master password
+- 📱 **Responsive Design**: Adaptable to different window sizes
+- 🎨 **Dark Mode**: Optimized interface for working at any time
+- ⚡ **Optimized Performance**: Built with Vite for maximum speed
+- 🔍 **Search and Filter**: Quickly find the credentials you need
+
+## 🔐 Security and Encryption Architecture
+
+### **Encryption Keys**
+
+CodePass uses a **dual-key system** for maximum security:
+
+**1. `masterKey` (Master Key for Drive)**
+- Derived ONLY from the `blockPhrase` (user's lock phrase)
+- **Without timeToken** → Deterministic and persistent
+- Used to encrypt/decrypt data in Google Drive
+- Stored in `chrome.storage.local` during active session
+- Cleaned on logout or password lock
+
+**2. `temporalsesionpass` (Temporary Session Key)**
+- Derived from `blockPhrase + timeToken` (unique per session)
+- **With timeToken** → Non-deterministic, changes every login
+- Used to encrypt/decrypt passwords locally
+- Stored in `chrome.storage.local` during session
+- Cleaned on logout or password lock
+
+### **Synchronization with Drive**
+
+**📤 TO Drive (Save)**
+- Automatic triggers after: create, edit, delete, import
+- Process: Decrypt local → Convert to plain → Encrypt with masterKey → Send to Drive
+
+**📥 FROM Drive (Retrieve)**
+- Automatic detection on login
+- Encrypted file (`<<<cpbh5:...>>>`) → Request blockPhrase
+- Plain file → Import directly
+
+**⚠️ Critical Security:**
+- Incorrect blockPhrase → **Automatic user logout**
+- Prevents overwriting Drive data due to authentication error
+
+### **Import/Export Flows**
+
+**📥 Import:**
+- Plain file without active blockpass → Import without encryption
+- Plain file with active blockpass → Encrypt with temporalsesionpass
+- Encrypted file → Request blockPhrase → Decrypt → Recrypt locally
+- All imports automatically sync with Drive
+
+**📤 Export:**
+- Without lock → Plain .txt file
+- With lock → Encrypted file with format `<<<cpbh5:...>>>`
+
+## 🚀 Installation and Development
+
+### **Prerequisites**
+- Node.js 16+ 
+- npm or yarn
+- Google Chrome (for testing)
+
+### **Environment Setup**
+
+```bash
+# Clone repository
+git clone https://github.com/azanoRivers/codepass-extension.git
+cd codepass-extension
+
+# Install dependencies
+npm install
+
+# Development with hot reload
+npm run dev
+
+# Production build
+npm run build
+
+# Build with auto-recompilation
+npm run build-watch
+```
+
+### **Install in Chrome**
+
+1. Run `npm run build`
+2. Open Chrome → `chrome://extensions/`
+3. Enable "Developer mode"
+4. Click "Load unpacked"
+5. Select `dist/` folder
+
+## 🔒 Security
+
+- **Encrypted Storage**: Passwords stored securely with AES-GCM 256-bit
+- **PBKDF2 Key Derivation**: 310,000 iterations with SHA-256
+- **OAuth Authentication**: Google OAuth integration
+- **Input Validation**: Sanitization of all inputs
+- **Minimal Permissions**: Only necessary permissions to function
+
+## 📄 License
+
+**Custom Educational and Non-Commercial Use License**
+
+This software is open source with the following conditions:
+
+### ✅ Allowed:
+- ✅ Free personal and educational use
+- ✅ Study, learn and modify the code
+- ✅ Distribute modified versions (forks) with credit to the original author
+- ✅ Contribute improvements via Pull Requests
+
+### ❌ Prohibited:
+- ❌ Direct commercial use (selling the extension as-is)
+- ❌ Commercial use with minimal modifications (copy with superficial changes)
+- ❌ Distribution with malicious intent (malware, phishing, etc.)
+- ❌ Remove or modify the original author's credits
+
+**Legal Notice:** Any distribution must maintain this license and credit **AzanoRivers / Andrés Rivera** as the original author. Commercial use requires express authorization from the author.
+
+For commercial inquiries, contact: [GitHub @AzanoRivers](https://github.com/AzanoRivers)
+
+## 👥 Team
+
+Developed by **AzanoRivers - Andrés Rivera** with ❤️
 
 ---
