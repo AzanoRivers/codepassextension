@@ -458,6 +458,88 @@ CodePass is a Chrome browser extension that provides a modern and secure interfa
 - ⚡ **Optimized Performance**: Built with Vite for maximum speed
 - 🔍 **Search and Filter**: Quickly find the credentials you need
 
+## 🏗️ Project Architecture
+
+### 📁 Directory Structure
+
+```
+codepass-extension/
+├── 📂 public/                 # Public extension files
+│   ├── manifest.json          # Chrome Extension configuration
+│   ├── background.js          # Extension Service Worker
+│   └── img/                   # Icons and graphic resources
+├── 📂 src/                    # Main source code
+│   ├── App.jsx                # Application root component
+│   ├── AppUi.jsx              # Main UI Layout
+│   ├── tailwind.css           # Global Tailwind styles
+│   └── 📂 assets/             # Resources and components
+│       ├── 📂 components/     # Reusable components
+│       ├── 📂 contexts/       # React Contexts (Global state)
+│       ├── 📂 hooks/          # Custom Hooks
+│       ├── 📂 pages/          # Main pages
+│       └── 📂 utils/          # Utilities and helpers
+├── 📄 vite.config.js          # Vite configuration
+├── 📄 tailwind.config.js      # TailwindCSS configuration
+└── 📄 package.json            # Dependencies and scripts
+```
+
+### 🧩 Component Architecture
+
+#### **🌐 Contexts (Global State)**
+- **`CodePassContext`**: Main application state (passwords, configuration, modals)
+- **`LoginContext`**: User authentication and session management
+
+#### **🎯 Custom Hooks**
+- **`useLogin`**: Authentication management
+- **`useModalLock`**: Lock modal control
+- **`useTestRed`**: Internet connection verification
+- **`useCodePassData`**: Password data access
+- **`useSetPassblock`**: Password lock configuration
+- **`useToolsPassword`**: Password manipulation tools
+- **`useSyncDrive`**: Automatic Google Drive synchronization
+- **`useDataDriveGoogle`**: Drive data retrieval on login
+- **`useImportPasswords`**: Password file import (encrypted or plain)
+
+#### **📄 Main Pages**
+- **`Login.jsx`**: Authentication page
+- **`CodePass.jsx`**: Main password management dashboard
+
+#### **🔧 Key Components**
+
+**UI Components:**
+- **`Header`**: Header with user information
+- **`Footer`**: Footer with additional information
+- **`ModalGeneric`**: Reusable modal for different purposes
+- **`ButtonGeneric`**: Customizable button
+- **`InputGeneric`**: Input with validations and custom styles
+
+**Functionality Components:**
+- **`PasswordBox`**: Main password container
+- **`CardPasswordBox`**: Individual password card
+- **`InputCodepass`**: Main input for search/filter
+- **`LoginGoogle`**: Google login button
+- **`UserAccount`**: User account information
+- **`LogoutButton`**: Logout button
+
+**Icons:**
+- **`IconRobotX`**, **`IconRobotHappy`**, **`IconRobotWh`**: Status icons
+- **`IconEye`**, **`IconEdit`**, **`IconLock`**, **`IconTrash`**: Action icons
+- **`IconSearch`**, **`IconMenuPoints`**, **`IconRandom`**: Tool icons
+
+### 🔄 Data Flow
+
+```mermaid
+graph TD
+    A[App.jsx] --> B[LoginContext]
+    A --> C[CodePassContext]
+    B --> D[Login.jsx]
+    C --> E[CodePass.jsx]
+    E --> F[Header]
+    E --> G[InputCodepass]
+    E --> H[PasswordBox]
+    H --> I[CardPasswordBox]
+```
+
 ## 🔐 Security and Encryption Architecture
 
 ### **Encryption Keys**
@@ -478,16 +560,56 @@ CodePass uses a **dual-key system** for maximum security:
 - Stored in `chrome.storage.local` during session
 - Cleaned on logout or password lock
 
-### **Synchronization with Drive**
+**Key Derivation (PBKDF2):**
+```javascript
+// masterKey (without timeToken)
+const masterKey = await deriveMasterKey(blockPhrase);
+
+// temporalsesionpass (with timeToken)
+const temporalSessionPass = await deriveMasterKey(blockPhrase, timeToken);
+```
+
+**Encryption Algorithms:**
+- **PBKDF2**: Key derivation (310,000 iterations, SHA-256)
+- **AES-GCM**: Symmetric encryption (256 bits)
+- **Base64**: Encrypted data encoding
+
+### **Drive Synchronization Flows**
 
 **📤 TO Drive (Save)**
-- Automatic triggers after: create, edit, delete, import
-- Process: Decrypt local → Convert to plain → Encrypt with masterKey → Send to Drive
+
+Automatic triggers after:
+- Create new password (500ms delay)
+- Edit existing password (500ms delay)
+- Delete password (500ms delay)
+- Import passwords (500ms or 1000ms depending on case)
+- Set/update blockpass
+
+**Synchronization process:**
+```javascript
+1. Read encrypted passwords from chrome.storage.local
+2. Decrypt with temporalsesionpass
+3. Convert to plain string format
+4. Encrypt with masterKey (or send plain if no blockpass)
+5. Send to Drive with format: <<<cpbh5:ENCRYPTED_DATA>>>
+```
 
 **📥 FROM Drive (Retrieve)**
-- Automatic detection on login
-- Encrypted file (`<<<cpbh5:...>>>`) → Request blockPhrase
+
+Automatic detection on login:
 - Plain file → Import directly
+- Encrypted file (`<<<cpbh5:...>>>`) → Request blockPhrase with modal
+
+**Recovery process:**
+```javascript
+1. Detect encrypted file in Drive
+2. Show ModalRequired to request blockPhrase
+3. Derive masterKey (without timeToken)
+4. Decrypt content with masterKey
+5. Derive temporalsesionpass (with timeToken)
+6. Encrypt passwords locally with temporalsesionpass
+7. Save in context and chrome.storage.local
+```
 
 **⚠️ Critical Security:**
 - Incorrect blockPhrase → **Automatic user logout**
@@ -495,15 +617,102 @@ CodePass uses a **dual-key system** for maximum security:
 
 ### **Import/Export Flows**
 
-**📥 Import:**
-- Plain file without active blockpass → Import without encryption
-- Plain file with active blockpass → Encrypt with temporalsesionpass
-- Encrypted file → Request blockPhrase → Decrypt → Recrypt locally
-- All imports automatically sync with Drive
+**📥 Import**
 
-**📤 Export:**
-- Without lock → Plain .txt file
-- With lock → Encrypted file with format `<<<cpbh5:...>>>`
+**Case 1: Plain file + No active blockpass**
+```javascript
+1. Read plain .txt file
+2. Transform to password format
+3. Save unencrypted
+4. Sync with Drive in plain format
+```
+
+**Case 2: Plain file + Active blockpass**
+```javascript
+1. Read plain .txt file
+2. Transform to password format
+3. Encrypt with temporalsesionpass
+4. Save encrypted
+5. Sync with Drive (encrypted with masterKey)
+```
+
+**Case 3: Encrypted file + No previous blockpass**
+```javascript
+1. Detect <<<cpbh5:...>>> format
+2. Show ModalRequired to request blockPhrase
+3. Decrypt with masterKey derived from blockPhrase
+4. Create blockdatapass and save masterKey
+5. Derive temporalsesionpass
+6. Encrypt passwords with temporalsesionpass
+7. Save and sync with Drive
+```
+
+**Case 4: Encrypted file + Active blockpass**
+```javascript
+1. Detect <<<cpbh5:...>>> format
+2. Show ModalRequired
+3. Validate blockPhrase matches blockdatapass
+4. Decrypt, combine with existing passwords
+5. Re-encrypt everything with temporalsesionpass
+6. Sync with Drive
+```
+
+**📤 Export**
+
+**Without lock:**
+```javascript
+1. Decrypt passwords (if locally encrypted)
+2. Convert to plain string format
+3. Export as .txt unencrypted
+```
+
+**With lock:**
+```javascript
+1. Request blockPhrase from user
+2. Decrypt local passwords with temporalsesionpass
+3. Encrypt with masterKey derived from blockPhrase
+4. Export with format: <<<cpbh5:ENCRYPTED_DATA>>>
+```
+
+### **Lock State Management**
+
+**States in chrome.storage.local:**
+- `blockdatapass`: BlockPhrase encrypted with itself
+- `masterkey`: Key for Drive (active only during session)
+- `temporalsesionpass`: Local key (active only during session)
+- `manualunblockpass`: Manual unlock flag (without blockpass)
+
+**Password Lock:**
+```javascript
+// On lock
+chrome.storage.local.remove('temporalsesionpass');
+chrome.storage.local.remove('masterkey');
+
+// On unlock
+const temporalSessionPass = await deriveMasterKey(blockPhrase, timeToken);
+const masterKey = await deriveMasterKey(blockPhrase);
+chrome.storage.local.set({ temporalsesionpass: temporalSessionPass });
+chrome.storage.local.set({ masterkey: masterKey });
+```
+
+**Cleanup on Logout:**
+```javascript
+chrome.storage.local.remove('accountToken');
+chrome.storage.local.remove('timeToken');
+chrome.storage.local.remove('codepassdata');
+chrome.storage.local.remove('blockdatapass');
+chrome.storage.local.remove('temporalsesionpass');
+chrome.storage.local.remove('masterkey');
+```
+
+### **📋 Security Checklist**
+
+✅ **MasterKey never stored permanently** (only during active session)  
+✅ **Local passwords encrypted with temporalsesionpass** (changes per session)  
+✅ **Drive encrypted with masterKey** (deterministic for read/write)  
+✅ **BlockPhrase never saved in plain text**  
+✅ **Automatic logout if Drive decryption fails**  
+✅ **Complete key cleanup on session close**
 
 ## 🚀 Installation and Development
 
