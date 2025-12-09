@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "CodePass",
     "version": "1.0",
-    "description": "Gestión de passwords para CodeLabs",
+    "description": "Simple and modern password management",
     "permissions": [
         "scripting",
         "storage",
