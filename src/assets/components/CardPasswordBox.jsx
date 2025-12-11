@@ -39,12 +39,12 @@ const CardPasswordBox = ({ name, pass, namekey, datablock }) => {
     // [FUNCTIONS]
     const clickCard = (event) => {
         if (blockCard || blockConfirm) {
-            // console.log('Bloqueado, no se hace nada 1', blockCard, '---', blockConfirm);
+            //console.log('Bloqueado, no se hace nada 1', blockCard, '---', blockConfirm);
             return;
         }
         // Hace swap de la tarjeta y copia la contraseña al portapapeles
         if (refCopySuccess.current) {
-            // console.log('Bloqueado, no se hace nada 2 por swap');
+            //console.log('Bloqueado, no se hace nada 2 por swap');
             return;
         }
         refCopySuccess.current = true;
@@ -52,7 +52,7 @@ const CardPasswordBox = ({ name, pass, namekey, datablock }) => {
         let currentNode = event.target;
         let articleElement = false;
         if (event.target.classList?.contains("iconAction")) {
-            // console.log('Bloqueado, no se hace nada 3 por iconAction');
+            //console.log('Bloqueado, no se hace nada 3 por iconAction');
             return;
         }
         for (let i = 0; i < MAX_DEPTH && currentNode; i++) {
@@ -77,7 +77,7 @@ const CardPasswordBox = ({ name, pass, namekey, datablock }) => {
                 const decrypted = await decryptWithPassphrase(password, TIME_TOKEN.temporalsesionpass);
                 return decrypted || '';
             } catch (error) {
-                // console.log("Error decrypting password:", error);
+                //console.log("Error decrypting password:", error);
                 return '';
             }
         };
@@ -86,11 +86,11 @@ const CardPasswordBox = ({ name, pass, namekey, datablock }) => {
                 navigator.clipboard.writeText(decryptedPassword).then(() => {
                     toast.success(MESSAGE_ES.display.copyPasswordOk, { position: 'bottom-center', duration: 1000, });
                 }).catch(err => {
-                    console.error("Error al copiar la contraseña:", err);
+                    //console.error("Error al copiar la contraseña:", err);
                 });
             });
         } else {
-            // console.log("No se encontró el atributo data-pss en el elemento.");
+            //console.log("No se encontró el atributo data-pss en el elemento.");
         }
         setTimeout(() => {
             refCopySuccess.current = false;

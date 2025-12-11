@@ -1,13 +1,18 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.action) {
-        case "login_with_google":
+        case "login_with_google": {
+            // Obtener el ID real de la extensión dinámicamente
+            const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org`;
+            //console.log('🔑 Redirect URI:', redirectUri);
+            //console.log('🆔 Extension ID:', chrome.runtime.id);
+            
             chrome.identity.launchWebAuthFlow(
                 {
                     url: "https://accounts.google.com/o/oauth2/auth" +
                         "?client_id=506593573242-grsd3afb2s9vhkuuqua5vcksv8v0mc8v.apps.googleusercontent.com" +
                         "&response_type=token" +
                         "&scope=openid%20email%20profile%20https://www.googleapis.com/auth/drive" +
-                        "&redirect_uri=https://akmmdfaidkmoghpnmidkecppdkdgimfn.chromiumapp.org",
+                        `&redirect_uri=${encodeURIComponent(redirectUri)}`,
                     interactive: true
                 },
                 (redirectUrl) => {
@@ -21,6 +26,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 }
             );
             return true;
+        }
         case "get_drive_files":
             chrome.storage.local.get("accountToken").then(({ accountToken: userToken }) => {
                 const targetFolderName = message.folderName || "codepassextension";

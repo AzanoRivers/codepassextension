@@ -44,6 +44,8 @@ const LoginGoogle = () => {
                     { action: "login_with_google" },
                     (response) => {
                         if ((response?.error !== '' && !response.success) || !response.token) {
+                            //console.log(response);
+                            
                             toast.error(MESSAGE_ES.error.denegate, { position: 'bottom-center', duration: 3000, });
                             setErrorLogin(true);
                             setTextLogin(MESSAGE_ES.buttons.login);
@@ -64,7 +66,7 @@ const LoginGoogle = () => {
         } catch (error) {
             refWaiting.current = false;
             setErrorLogin(true);
-            // console.log(error.message);
+            //console.log(error.message);
             setTextLogin(MESSAGE_ES.buttons.login);
             toast.error(MESSAGE_ES.error.unexpected, { position: 'bottom-center', duration: 3000, });
         }

@@ -3,7 +3,7 @@ import { useState, forwardRef, useEffect } from 'react';
 
 const InputGeneric = forwardRef(({ placeholder = "Input Placeholder", value = "", onChange, keydownaction, type = "text", className = "" }, ref) => {
     const [inputValue, setInputValue] = useState(value);
-    const KEYDOWN_ACTION = keydownaction || (() => { /* console.log('No action defined for Enter key'); */ });
+    const KEYDOWN_ACTION = keydownaction || (() => { /* //console.log('No action defined for Enter key'); */ });
     const CLASS_NAME = `input-codepass w-full h-10 text-base ${className}`;
     const generateNameRandom = () => {
         return `input-generic-${Math.random().toString(36).substring(2, 15)}`;

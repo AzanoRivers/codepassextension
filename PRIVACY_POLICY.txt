@@ -1,0 +1,435 @@
+═══════════════════════════════════════════════════════════════════════
+               POLÍTICA DE PRIVACIDAD DE CODEPASS
+                      Privacy Policy - CodePass
+                     Última actualización: 10/12/2025
+═══════════════════════════════════════════════════════════════════════
+
+📧 CONTACTO DEL DESARROLLADOR
+   Sitio web: https://azanorivers.com
+   Developer: AzanoRivers / AzanoLabs
+
+───────────────────────────────────────────────────────────────────────
+🇪🇸 ESPAÑOL
+───────────────────────────────────────────────────────────────────────
+
+1. INTRODUCCIÓN Y COMPROMISO DE PRIVACIDAD
+
+CodePass es una extensión de navegador para Chrome diseñada para la gestión 
+segura de contraseñas con sincronización opcional mediante Google Drive. 
+Nos comprometemos a proteger tu privacidad y a ser completamente transparentes 
+sobre cómo manejamos tus datos.
+
+PRINCIPIO FUNDAMENTAL: 
+CodePass NO comparte, NO vende, NO transfiere y NO almacena tus datos en 
+servidores externos propios. Toda la información permanece bajo tu control 
+exclusivo.
+
+
+2. INFORMACIÓN QUE RECOPILAMOS Y CÓMO LA USAMOS
+
+2.1. Datos de Autenticación de Google
+────────────────────────────────────────
+• QUÉ RECOPILAMOS:
+  - Token de acceso OAuth 2.0 de Google (temporal)
+  - Información básica de perfil (email, nombre)
+  
+• CÓMO LO USAMOS:
+  - Autenticar tu identidad con Google
+  - Acceder a Google Drive para sincronización (solo si lo autorizas)
+  - Validar permisos de acceso
+  
+• DÓNDE SE ALMACENA:
+  - Localmente en tu navegador (chrome.storage.local)
+  - Temporalmente (expira en 15 minutos, debes renovarlo)
+  - NUNCA en servidores externos de CodePass
+  
+• PERMISOS DE GOOGLE:
+  - openid, email, profile: Identificación básica
+  - https://www.googleapis.com/auth/drive: Acceso a Drive
+
+
+2.2. Contraseñas y Credenciales
+────────────────────────────────
+• QUÉ ALMACENAMOS:
+  - Contraseñas que tú decides guardar en CodePass
+  - Nombres de servicio/sitio web asociados
+  - Nombres de usuario asociados
+  
+• CÓMO SE PROTEGEN:
+  - Cifrado AES-GCM de 256 bits localmente
+  - Derivación de claves con PBKDF2 (310,000 iteraciones)
+  - Contraseña maestra opcional (blockPhrase) que NUNCA se guarda en texto plano
+  - Claves de cifrado temporales que se destruyen al cerrar sesión
+  
+• DÓNDE SE ALMACENAN:
+  - Localmente: chrome.storage.local (cifradas)
+  - Google Drive: archivo "codepassdata.txt" en carpeta "codepassextension" 
+    (cifrado si configuras blockPhrase, o plano si lo prefieres)
+  
+• IMPORTANTE:
+  - CodePass NO puede leer tus contraseñas si usas blockPhrase
+  - Si olvidas tu blockPhrase, NO podemos recuperar tus datos
+  - Solo TÚ tienes acceso a tus contraseñas
+
+
+2.3. Datos de Configuración Local
+──────────────────────────────────
+• QUÉ ALMACENAMOS:
+  - Preferencias de tema oscuro/claro
+  - Estado de bloqueo de contraseñas
+  - Configuración de sincronización automática
+  
+• DÓNDE SE ALMACENA:
+  - Localmente en chrome.storage.local
+  - NUNCA se sincroniza con servidores externos
+
+
+3. CÓMO COMPARTIMOS TU INFORMACIÓN
+
+3.1. Google Drive (Solo con tu Autorización)
+─────────────────────────────────────────────
+• Tu archivo de contraseñas se sincroniza ÚNICAMENTE con TU cuenta de 
+  Google Drive personal
+• Nadie más tiene acceso (ni siquiera nosotros)
+• Puedes revocar el acceso en cualquier momento desde tu cuenta de Google
+• El archivo se almacena en: Google Drive > codepassextension > codepassdata.txt
+
+
+3.2. NO Compartimos con Terceros
+─────────────────────────────────
+CodePass NO comparte, vende, alquila ni transfiere tus datos personales 
+a terceros bajo ninguna circunstancia, excepto:
+
+• Cumplimiento Legal: Si la ley lo requiere (orden judicial, etc.)
+• Protección de Derechos: Para proteger nuestros derechos legales
+
+
+4. SERVICIOS DE TERCEROS UTILIZADOS
+
+4.1. Google OAuth 2.0 y Google Drive API
+─────────────────────────────────────────
+• Proveedor: Google LLC
+• Propósito: Autenticación y almacenamiento en Drive
+• Política de Privacidad: https://policies.google.com/privacy
+• Puedes revocar acceso: https://myaccount.google.com/permissions
+
+
+4.2. Google Fonts (Solo para UI)
+─────────────────────────────────
+• Proveedor: Google LLC
+• Propósito: Cargar fuentes tipográficas (Orbitron, Barlow Condensed)
+• URL: https://fonts.googleapis.com/
+• Datos recopilados por Google Fonts: Dirección IP (para entrega de fuentes)
+• Política: https://developers.google.com/fonts/faq/privacy
+• Nota: Es un servicio estándar de la web, similar a cualquier sitio que uses
+
+
+5. SEGURIDAD DE TUS DATOS
+
+5.1. Medidas de Seguridad Implementadas
+────────────────────────────────────────
+✓ Cifrado de extremo a extremo con AES-GCM 256 bits
+✓ Derivación de claves con PBKDF2 (310,000 iteraciones, SHA-256)
+✓ Claves temporales que se eliminan al cerrar sesión
+✓ Contraseña maestra (blockPhrase) cifrada consigo misma
+✓ Tokens de autenticación con expiración (15 minutos)
+✓ Sin almacenamiento en servidores propios
+✓ Sin registro de actividad o logs externos
+
+
+5.2. Responsabilidad del Usuario
+─────────────────────────────────
+• Mantén tu blockPhrase segura y privada
+• Usa contraseñas fuertes para tu cuenta de Google
+• Revisa regularmente los permisos de tu cuenta de Google
+• Cierra sesión en dispositivos compartidos
+
+
+6. TUS DERECHOS DE PRIVACIDAD
+
+Tienes derecho a:
+
+✓ Acceder a tus datos (están en tu Google Drive y chrome.storage.local)
+✓ Modificar tus datos (edita o elimina passwords en cualquier momento)
+✓ Eliminar tus datos:
+  - Cierra sesión → se eliminan datos locales automáticamente
+  - Elimina el archivo de Drive manualmente si lo deseas
+  - Desinstala la extensión → se eliminan todos los datos locales
+✓ Exportar tus datos (función de exportación disponible en la extensión)
+✓ Revocar permisos de Google Drive en cualquier momento
+
+
+7. RETENCIÓN Y ELIMINACIÓN DE DATOS
+
+• Datos Locales: Se eliminan automáticamente al cerrar sesión o desinstalar
+• Google Drive: Permanecen hasta que TÚ los elimines manualmente
+• Tokens de Acceso: Expiran automáticamente en 15 minutos
+• Claves de Cifrado: Se eliminan al bloquear o cerrar sesión
+
+
+8. PRIVACIDAD DE MENORES DE EDAD
+
+CodePass NO está diseñado para menores de 13 años. No recopilamos 
+intencionalmente información de menores. Si eres padre/tutor y descubres 
+que tu hijo nos proporcionó información, contáctanos para eliminarla.
+
+
+9. CAMBIOS A ESTA POLÍTICA DE PRIVACIDAD
+
+Podemos actualizar esta política ocasionalmente. Te notificaremos de 
+cambios significativos mediante:
+• Actualización de la fecha en la parte superior
+• Notificación en la extensión (si aplica)
+
+Recomendamos revisar esta política periódicamente.
+
+
+10. TRANSPARENCIA TÉCNICA
+
+10.1. Permisos de Chrome Solicitados
+─────────────────────────────────────
+• "storage": Para guardar configuración y datos cifrados localmente
+• "identity": Para autenticación con Google OAuth 2.0
+
+10.2. Datos que NO Recopilamos
+──────────────────────────────
+✗ Historial de navegación
+✗ Sitios web visitados
+✗ Datos de tarjetas de crédito
+✗ Información de ubicación
+✗ Análisis de uso o telemetría
+✗ Publicidad o tracking
+✗ Información de dispositivos
+
+
+11. CONTACTO Y SOPORTE
+
+Si tienes preguntas sobre esta Política de Privacidad o sobre cómo 
+manejamos tus datos, contáctanos:
+
+📧 Email: [TU_EMAIL_AQUI]
+🌐 Web: [TU_WEB_AQUI]
+💻 GitHub: https://github.com/azanoRivers/codepass-extension
+
+
+12. CUMPLIMIENTO LEGAL
+
+Esta extensión cumple con:
+• Políticas del Programa para Desarrolladores de Chrome Web Store
+• GDPR (Reglamento General de Protección de Datos - UE)
+• CCPA (California Consumer Privacy Act - EE.UU.)
+
+
+───────────────────────────────────────────────────────────────────────
+🇬🇧 ENGLISH
+───────────────────────────────────────────────────────────────────────
+
+1. INTRODUCTION AND PRIVACY COMMITMENT
+
+CodePass is a Chrome browser extension designed for secure password 
+management with optional synchronization via Google Drive. We are committed 
+to protecting your privacy and being completely transparent about how we 
+handle your data.
+
+FUNDAMENTAL PRINCIPLE:
+CodePass does NOT share, sell, transfer, or store your data on our own 
+external servers. All information remains under your exclusive control.
+
+
+2. INFORMATION WE COLLECT AND HOW WE USE IT
+
+2.1. Google Authentication Data
+────────────────────────────────
+• WHAT WE COLLECT:
+  - Temporary Google OAuth 2.0 access token
+  - Basic profile information (email, name)
+  
+• HOW WE USE IT:
+  - Authenticate your identity with Google
+  - Access Google Drive for synchronization (only if you authorize)
+  - Validate access permissions
+  
+• WHERE IT'S STORED:
+  - Locally in your browser (chrome.storage.local)
+  - Temporarily (expires in 15 minutes, must be renewed)
+  - NEVER on CodePass external servers
+  
+• GOOGLE PERMISSIONS:
+  - openid, email, profile: Basic identification
+  - https://www.googleapis.com/auth/drive: Drive access
+
+
+2.2. Passwords and Credentials
+───────────────────────────────
+• WHAT WE STORE:
+  - Passwords you choose to save in CodePass
+  - Associated service/website names
+  - Associated usernames
+  
+• HOW THEY'RE PROTECTED:
+  - 256-bit AES-GCM encryption locally
+  - PBKDF2 key derivation (310,000 iterations)
+  - Optional master password (blockPhrase) NEVER stored in plain text
+  - Temporary encryption keys destroyed on logout
+  
+• WHERE THEY'RE STORED:
+  - Locally: chrome.storage.local (encrypted)
+  - Google Drive: "codepassdata.txt" file in "codepassextension" folder
+    (encrypted if you set blockPhrase, or plain if you prefer)
+  
+• IMPORTANT:
+  - CodePass CANNOT read your passwords if you use blockPhrase
+  - If you forget your blockPhrase, we CANNOT recover your data
+  - Only YOU have access to your passwords
+
+
+2.3. Local Configuration Data
+──────────────────────────────
+• WHAT WE STORE:
+  - Dark/light theme preferences
+  - Password lock state
+  - Auto-sync configuration
+  
+• WHERE IT'S STORED:
+  - Locally in chrome.storage.local
+  - NEVER synchronized with external servers
+
+
+3. HOW WE SHARE YOUR INFORMATION
+
+3.1. Google Drive (Only with Your Authorization)
+─────────────────────────────────────────────────
+• Your password file synchronizes ONLY with YOUR personal Google Drive account
+• No one else has access (not even us)
+• You can revoke access anytime from your Google account
+• File is stored at: Google Drive > codepassextension > codepassdata.txt
+
+
+3.2. NO Third-Party Sharing
+───────────────────────────
+CodePass does NOT share, sell, rent, or transfer your personal data to 
+third parties under any circumstances, except:
+
+• Legal Compliance: If required by law (court order, etc.)
+• Rights Protection: To protect our legal rights
+
+
+4. THIRD-PARTY SERVICES USED
+
+4.1. Google OAuth 2.0 and Google Drive API
+───────────────────────────────────────────
+• Provider: Google LLC
+• Purpose: Authentication and Drive storage
+• Privacy Policy: https://policies.google.com/privacy
+• Revoke access: https://myaccount.google.com/permissions
+
+
+4.2. Google Fonts (UI Only)
+───────────────────────────
+• Provider: Google LLC
+• Purpose: Load typography fonts (Orbitron, Barlow Condensed)
+• URL: https://fonts.googleapis.com/
+• Data collected by Google Fonts: IP address (for font delivery)
+• Policy: https://developers.google.com/fonts/faq/privacy
+• Note: Standard web service, similar to any website you use
+
+
+5. DATA SECURITY
+
+5.1. Implemented Security Measures
+───────────────────────────────────
+✓ End-to-end encryption with 256-bit AES-GCM
+✓ PBKDF2 key derivation (310,000 iterations, SHA-256)
+✓ Temporary keys deleted on logout
+✓ Master password (blockPhrase) encrypted with itself
+✓ Authentication tokens with expiration (15 minutes)
+✓ No storage on proprietary servers
+✓ No activity logging or external logs
+
+
+5.2. User Responsibility
+────────────────────────
+• Keep your blockPhrase secure and private
+• Use strong passwords for your Google account
+• Regularly review your Google account permissions
+• Log out on shared devices
+
+
+6. YOUR PRIVACY RIGHTS
+
+You have the right to:
+
+✓ Access your data (it's in your Google Drive and chrome.storage.local)
+✓ Modify your data (edit or delete passwords anytime)
+✓ Delete your data:
+  - Log out → local data automatically deleted
+  - Manually delete Drive file if desired
+  - Uninstall extension → all local data deleted
+✓ Export your data (export function available in extension)
+✓ Revoke Google Drive permissions anytime
+
+
+7. DATA RETENTION AND DELETION
+
+• Local Data: Automatically deleted on logout or uninstall
+• Google Drive: Remains until YOU manually delete it
+• Access Tokens: Automatically expire in 15 minutes
+• Encryption Keys: Deleted on lock or logout
+
+
+8. CHILDREN'S PRIVACY
+
+CodePass is NOT designed for children under 13. We do not knowingly 
+collect information from minors. If you are a parent/guardian and discover 
+your child provided us information, contact us to delete it.
+
+
+9. CHANGES TO THIS PRIVACY POLICY
+
+We may update this policy occasionally. We will notify you of significant 
+changes through:
+• Updating the date at the top
+• Notification in the extension (if applicable)
+
+We recommend reviewing this policy periodically.
+
+
+10. TECHNICAL TRANSPARENCY
+
+10.1. Chrome Permissions Requested
+───────────────────────────────────
+• "storage": To save configuration and encrypted data locally
+• "identity": For Google OAuth 2.0 authentication
+
+10.2. Data We Do NOT Collect
+────────────────────────────
+✗ Browsing history
+✗ Visited websites
+✗ Credit card data
+✗ Location information
+✗ Usage analytics or telemetry
+✗ Advertising or tracking
+✗ Device information
+
+
+11. CONTACT AND SUPPORT
+
+If you have questions about this Privacy Policy or how we handle your 
+data, contact us:
+
+📧 Email: [TU_EMAIL_AQUI]
+🌐 Web: [TU_WEB_AQUI]
+💻 GitHub: https://github.com/azanoRivers/codepass-extension
+
+
+12. LEGAL COMPLIANCE
+
+This extension complies with:
+• Chrome Web Store Developer Program Policies
+• GDPR (General Data Protection Regulation - EU)
+• CCPA (California Consumer Privacy Act - USA)
+
+
+═══════════════════════════════════════════════════════════════════════
+                         FIN / END
+═══════════════════════════════════════════════════════════════════════

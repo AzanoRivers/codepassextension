@@ -27,7 +27,7 @@ const GO_TO_ENCRYPT_REMOVE = async (valuepass, shouldCreateKey) => {
             chrome.storage.local.remove('masterkey');
         }
     } catch (error) {
-        // console.log("Error encrypting block password:", error);
+        //console.log("Error encrypting block password:", error);
     }
 };
 

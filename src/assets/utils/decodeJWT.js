@@ -16,7 +16,7 @@ function decodeJWT(jwtdata) {
         };
         return DATA_USER;
     } catch (error) {
-        console.error('Error al decodificar el JWT:', error);
+        //console.error('Error al decodificar el JWT:', error);
         return false;
     }
 }

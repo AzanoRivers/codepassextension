@@ -57,7 +57,7 @@ const useExportPasswords = () => {
                     toast.error(MESSAGE_ES.errorunexpected, { position: 'bottom-center', duration: 3000 });
                     return;
                 }
-                // console.log('ExportWithBlock');
+                //console.log('ExportWithBlock');
                 // 1. Obtener temporalsesionpass del storage
                 const datatemporalsesion = await chrome.storage.local.get('temporalsesionpass');
                 if (!datatemporalsesion.temporalsesionpass) {
@@ -85,7 +85,7 @@ const useExportPasswords = () => {
                     toast.error(MESSAGE_ES.modalport.exporterror, { position: 'bottom-center', duration: 3000 });
                 }
             } catch (error) {
-                console.error('Error en exportWithBlock:', error);
+                //console.error('Error en exportWithBlock:', error);
                 toast.error(MESSAGE_ES.modalblock.errorunblock, { position: 'bottom-center', duration: 3000 });
             } finally {
                 okButton();
@@ -103,7 +103,7 @@ const useExportPasswords = () => {
             okButton();
             return;
         } else {
-            // console.log('ExportWithoutBlock');
+            //console.log('ExportWithoutBlock');
             const goToCreateFileAsync = async () => {
                 let passwordsDecrypted = [];
                 const datatemporalsesion = await chrome.storage.local.get('temporalsesionpass');

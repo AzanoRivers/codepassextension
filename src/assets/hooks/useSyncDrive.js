@@ -32,13 +32,13 @@ const useSyncDrive = (context = null) => {
      */
     const syncPasswordsToDrive = useCallback(async () => {
         if (isSyncing) {
-            // console.log('Sincronización ya en progreso');
+            //console.log('Sincronización ya en progreso');
             return false;
         }
 
         // Verificar conexión a internet antes de intentar sincronizar
         if (!navigator.onLine) {
-            console.warn('Sin conexión a internet - no se puede sincronizar');
+            //console.warn('Sin conexión a internet - no se puede sincronizar');
             if (context?.setDataCodePass) {
                 context.setDataCodePass(data => ({ ...data, net: false, modalError: true }));
             }
@@ -54,7 +54,7 @@ const useSyncDrive = (context = null) => {
 
             // Verificar que hay passwords para sincronizar
             if (currentPasswords.length === 0) {
-                // console.log('No hay passwords para sincronizar');
+                //console.log('No hay passwords para sincronizar');
                 setIsSyncing(false);
                 return false;
             }
@@ -67,14 +67,14 @@ const useSyncDrive = (context = null) => {
             // Si no hay temporalsesionpass ni blockdatapass, significa que no hay blockpass configurado
             // Sincronizar en formato plano (sin cifrar)
             if (!temporalsesionpass || !blockdatapass) {
-                // console.log('Sin blockpass configurado - sincronizando en formato plano');
+                //console.log('Sin blockpass configurado - sincronizando en formato plano');
                 
                 // Las passwords desde storage ya están en formato plano cuando no hay blockpass
                 const PASSWORDS_STRING = TRANSFORM_DATA_TO_ENCODED(currentPasswords);
                 FINAL_CONTENT = PASSWORDS_STRING;
             } else {
                 // Hay blockpass configurado - sincronizar cifrado
-                // console.log('Con blockpass configurado - sincronizando cifrado');
+                //console.log('Con blockpass configurado - sincronizando cifrado');
 
                 // 1. Descifrar todas las passwords con temporalsesionpass
                 let passwordsDecrypted = [];
@@ -91,10 +91,10 @@ const useSyncDrive = (context = null) => {
                 const { masterkey } = await chrome.storage.local.get('masterkey');
                 
                 if (masterkey) {
-                    // console.log('Usando masterKey desde storage');
+                    //console.log('Usando masterKey desde storage');
                     masterKey = masterkey;
                 } else {
-                    // console.log('Derivando masterKey desde blockdatapass');
+                    //console.log('Derivando masterKey desde blockdatapass');
                     // Descifrar blockdatapass para obtener el blockPhrase original
                     const blockPhrase = await decryptWithPassphrase(blockdatapass, blockdatapass);
                     masterKey = await deriveMasterKey(blockPhrase);
@@ -119,7 +119,7 @@ const useSyncDrive = (context = null) => {
                         },
                         (response) => {
                             if (chrome.runtime.lastError) {
-                                console.error('Error en chrome.runtime:', chrome.runtime.lastError);
+                                //console.error('Error en chrome.runtime:', chrome.runtime.lastError);
                                 setIsSyncing(false);
                                 
                                 // Manejar error de red - solo actualizar estado
@@ -132,11 +132,11 @@ const useSyncDrive = (context = null) => {
                             }
 
                             if (response?.success) {
-                                // console.log('Passwords sincronizadas con Drive exitosamente');
+                                //console.log('Passwords sincronizadas con Drive exitosamente');
                                 setIsSyncing(false);
                                 resolve(true);
                             } else {
-                                console.error('Error sincronizando con Drive:', response?.error);
+                                //console.error('Error sincronizando con Drive:', response?.error);
                                 setIsSyncing(false);
                                 
                                 // Si el error contiene "fetch" o "network", es un error de conexión
@@ -155,13 +155,13 @@ const useSyncDrive = (context = null) => {
                     );
                 });
             } else {
-                console.error('Chrome runtime no disponible');
+                //console.error('Chrome runtime no disponible');
                 setIsSyncing(false);
                 return false;
             }
 
         } catch (error) {
-            console.error('Error en sincronización con Drive:', error);
+            //console.error('Error en sincronización con Drive:', error);
             setIsSyncing(false);
             
             // Manejar error de red en el catch

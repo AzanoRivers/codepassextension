@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 function ButtonGeneric({ text, action, dark = true, light = false, className }) {
 
     const ACTION_BUTTON = () => {
-        console.warn('Set the button action with the attribute (action={func})');
+        //console.warn('Set the button action with the attribute (action={func})');
     };
 
     const ACTION = (action) ? action : ACTION_BUTTON;

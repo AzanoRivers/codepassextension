@@ -10,7 +10,7 @@ export function createFile({ filename, content }) {
         document.body.removeChild(element);
         return true;
     } catch (error) {
-        // console.log('Error creating file:', error);
+        //console.log('Error creating file:', error);
         return false;
     }
 }

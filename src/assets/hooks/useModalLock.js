@@ -4,7 +4,7 @@ import { CodePassContext } from '@contexts/CodepassContext';
 const useModalLock = () => {
     const context = useContext(CodePassContext);
     if (!context) {
-        console.error('useModalLock debe usarse dentro de un <CodePassProvider/>');
+        //console.error('useModalLock debe usarse dentro de un <CodePassProvider/>');
     }
     const { dataCodePass, setModalLock, setManualUnblockPass } = context;
     const [showModalLock, setShowModalLock] = useState(dataCodePass.modalLock);

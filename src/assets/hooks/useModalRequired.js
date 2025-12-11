@@ -6,7 +6,7 @@ const useModalRequired = () => {
     const { dataCodePass, setModalRequired, setOnImportFile, setOnDriveFile } = useContext(CodePassContext);
     const [showModalRequired, setShowModalRequired] = useState(false);
     if (!dataCodePass) {
-        console.error('useModalRequired debe usarse dentro de un <CodePassProvider/>');
+        //console.error('useModalRequired debe usarse dentro de un <CodePassProvider/>');
     }
     const toggleModalRequired = () => {
         document.startViewTransition(() => {

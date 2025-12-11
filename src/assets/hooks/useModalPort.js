@@ -5,7 +5,7 @@ const useModalPort = () => {
     const { dataCodePass, setModalPort } = useContext(CodePassContext);
     const [showModalPort, setShowModalPort] = useState(false);
     if (!dataCodePass) {
-        console.error('useModalPort debe usarse dentro de un <CodePassProvider/>');
+        //console.error('useModalPort debe usarse dentro de un <CodePassProvider/>');
     }
     const toggleModalPort = () => {
         document.startViewTransition(() => {

@@ -40,22 +40,22 @@ const CodePass = () => {
     useEffect(() => {
         // effectos de conexión y modal de error
         if (shouldTryConnection && !connect) {
-            // console.log('Intentando...');
+            //console.log('Intentando...');
             setConnect(true);
         }
         if (!connect) {
-            // console.log('Esperando red...');
+            //console.log('Esperando red...');
         }
         if (dataCodePass.net) {
             setSkeleton(false);
             setTimeout(() => {
                 setShowContent(true);
             }, 300);
-            // console.log('Red Ok!');
+            //console.log('Red Ok!');
         }
         if (dataCodePass.modalError) {
             setSkeleton(false);
-            console.warn('Error de Conexión');
+            //console.warn('Error de Conexión');
         }
     }, [shouldTryConnection, connect, dataCodePass.net, dataCodePass.modalError, setConnect]);
     
@@ -71,16 +71,16 @@ const CodePass = () => {
     
     useEffect(() => {
         if (dataCodePass.modalRequired && dataCodePass.onDriveFile) {
-            // console.log('Modal abierto para Drive file');
+            //console.log('Modal abierto para Drive file');
             setWasModalOpen(true);
         }
     }, [dataCodePass.modalRequired, dataCodePass.onDriveFile]);
 
     useEffect(() => {
-        // console.log('useEffect Drive - modalRequired:', dataCodePass.modalRequired, 'onDriveFile:', dataCodePass.onDriveFile, 'wasModalOpen:', wasModalOpen);
+        //console.log('useEffect Drive - modalRequired:', dataCodePass.modalRequired, 'onDriveFile:', dataCodePass.onDriveFile, 'wasModalOpen:', wasModalOpen);
         
         if (wasModalOpen && !dataCodePass.modalRequired && dataCodePass.onDriveFile) {
-            // console.log('Modal cerrado, iniciando procesamiento de archivo de Drive...');
+            //console.log('Modal cerrado, iniciando procesamiento de archivo de Drive...');
             setWasModalOpen(false);
             
             const processDriveFile = async () => {
@@ -89,33 +89,33 @@ const CodePass = () => {
                     const blockPhrase = temporaldrivepass;
                     const driveContent = temporaldrivecontent;
                     
-                    // console.log('Procesando archivo de Drive con blockPhrase');
+                    //console.log('Procesando archivo de Drive con blockPhrase');
                     
                     if (!driveContent) {
-                        console.error('No hay contenido de Drive para procesar');
+                        //console.error('No hay contenido de Drive para procesar');
                         setOnDriveFile(false);
                         return;
                     }
                     
                     if (!blockPhrase) {
-                        console.error('Frase de bloqueo no proporcionada');
+                        //console.error('Frase de bloqueo no proporcionada');
                         toast.error('Frase de bloqueo no proporcionada', { position: 'bottom-center', duration: 3000 });
                         setOnDriveFile(false);
                         return;
                     }
 
-                    // console.log('Derivando masterKey para descifrar Drive...');
+                    //console.log('Derivando masterKey para descifrar Drive...');
                     // Derivar masterKey (SIN timeToken) - igual que cuando se cifró para Drive
                     const masterKey = await deriveMasterKey(blockPhrase);
                     
-                    // console.log('Descifrando contenido de Drive con masterKey...');
+                    //console.log('Descifrando contenido de Drive con masterKey...');
                     const DECRYPTED_STRING = await TRANSFORM_ENCODED_TO_DATA({ 
                         encodedData: driveContent, 
                         passphrase: masterKey 
                     });
 
                     if (DECRYPTED_STRING?.error) {
-                        // console.log('Error al descifrar:', DECRYPTED_STRING.error);
+                        //console.log('Error al descifrar:', DECRYPTED_STRING.error);
                         toast.error('Frase de bloqueo incorrecta', { position: 'bottom-center', duration: 3000 });
                         
                         // Limpiar datos temporales
@@ -130,11 +130,11 @@ const CodePass = () => {
                         return;
                     }
 
-                    // console.log('Descifrado exitoso, transformando passwords...');
+                    //console.log('Descifrado exitoso, transformando passwords...');
                     const PASSWORDS_ARRAY = TRANSFORM_DATA_TO_PASSWORDS(DECRYPTED_STRING);
-                    // console.log('Passwords transformadas:', PASSWORDS_ARRAY.length);
+                    //console.log('Passwords transformadas:', PASSWORDS_ARRAY.length);
 
-                    // console.log('Configurando blockpass...');
+                    //console.log('Configurando blockpass...');
                     const encryptedBlockPass = await encryptWithPassphrase(blockPhrase, blockPhrase);
                     setPassBlock(encryptedBlockPass);
                     chrome.storage.local.set({ 'blockdatapass': encryptedBlockPass });
@@ -143,34 +143,34 @@ const CodePass = () => {
                     setManualUnblockPass(false);
                     chrome.storage.local.set({ 'manualunblockpass': false });
 
-                    // console.log('Guardando masterKey para sincronización con Drive...');
+                    //console.log('Guardando masterKey para sincronización con Drive...');
                     // Guardar masterKey (SIN timeToken) para usar en sync durante la sesión
                     chrome.storage.local.set({ 'masterkey': masterKey });
 
-                    // console.log('Derivando temporalsesionpass...');
+                    //console.log('Derivando temporalsesionpass...');
                     const TIME_TOKEN = await chrome.storage.local.get('timeToken');
                     const temporalSessionPass = await deriveMasterKey(blockPhrase, TIME_TOKEN.timeToken.toString());
                     chrome.storage.local.set({ 'temporalsesionpass': temporalSessionPass });
 
-                    // console.log('Cifrando passwords localmente...');
+                    //console.log('Cifrando passwords localmente...');
                     const encryptedPasswords = await go_to_encrypt({ 
                         passwords: PASSWORDS_ARRAY, 
                         masterKey: temporalSessionPass 
                     });
-                    // console.log('Passwords cifradas:', encryptedPasswords.length);
+                    //console.log('Passwords cifradas:', encryptedPasswords.length);
 
-                    // console.log('Actualizando contexto...');
+                    //console.log('Actualizando contexto...');
                     updateAllPasswords(encryptedPasswords);
 
-                    // console.log('Limpiando datos temporales...');
+                    //console.log('Limpiando datos temporales...');
                     chrome.storage.local.remove('temporaldrivepass');
                     chrome.storage.local.remove('temporaldrivecontent');
                     setOnDriveFile(false);
 
-                    // console.log('Proceso completado exitosamente');
+                    //console.log('Proceso completado exitosamente');
                     toast.success(MESSAGE_ES.buttons.connect, { position: 'bottom-center', duration: 3000 });
                 } catch (error) {
-                    console.error('Error procesando archivo de Drive:', error);
+                    //console.error('Error procesando archivo de Drive:', error);
                     toast.error(MESSAGE_ES.errorunexpected, { position: 'bottom-center', duration: 3000 });
                     chrome.storage.local.remove('temporaldrivepass');
                     chrome.storage.local.remove('temporaldrivecontent');

@@ -5,7 +5,7 @@
  *              Este hook debe usarse dentro del proveedor <CodePassProvider />.
  * @example
  * const [dataCodePass, setDataCodePass] = useCodePass();
- * console.log(dataCodePass.theme); // 'Dark'
+ * //console.log(dataCodePass.theme); // 'Dark'
  * setDataCodePass(prev => ({ ...prev, theme: 'Light' }));
  * @returns {[Object, Function]} Un array con el estado global `dataCodePass` y la función `setDataCodePass` para actualizarlo.
  */
@@ -18,7 +18,7 @@ const useCodePass = () => {
     const context = useContext(CodePassContext);
     const { dataCodePass, updatePasswords: contextUpdatePasswords } = context;
     if (!context) {
-        console.error('useCodePass debe usarse dentro de un <CodePassProvider/>');
+        //console.error('useCodePass debe usarse dentro de un <CodePassProvider/>');
     }
     const updatePasswords = (newPassblock) => {
         const ASYNC_GO_TO_ENCRYPT = async (newPassblock) => {

@@ -36,7 +36,7 @@ const useDataDriveGoogle = () => {
                 async (response) => {
                     try {
                         if (response?.error !== '' && !response.success) {
-                            console.error('Error obteniendo datos de Drive:', response.error);
+                            //console.error('Error obteniendo datos de Drive:', response.error);
                             toast.error(MESSAGE_ES.errorunexpected, { position: 'bottom-center', duration: 3000 });
                             setIsLoadingDataGoogle(false);
                             return;
@@ -49,21 +49,21 @@ const useDataDriveGoogle = () => {
                         
                         // Si hay datos cifrados pero NO hay blockPhrase, activar modal
                         if (hasCipheredData && !blockPhrase) {
-                            // console.log('Archivo cifrado detectado - requiere blockPhrase');
+                            //console.log('Archivo cifrado detectado - requiere blockPhrase');
                             chrome.storage.local.set({ 'temporaldrivecontent': fileContent });
                             
                             // Establecer onDriveFile primero
                             setOnDriveFile(true);
-                            // console.log('setOnDriveFile(true) llamado');
+                            //console.log('setOnDriveFile(true) llamado');
                             
                             // Cambiar a página CodePass
                             setLogin(true);
-                            // console.log('setLogin(true) llamado');
+                            //console.log('setLogin(true) llamado');
                             
                             // Activar modal con un pequeño delay
                             setTimeout(() => {
                                 setModalRequired(true);
-                                // console.log('setModalRequired(true) llamado');
+                                //console.log('setModalRequired(true) llamado');
                             }, 300);
                             
                             setIsLoadingDataGoogle(false);
@@ -147,7 +147,7 @@ const useDataDriveGoogle = () => {
                         setIsLoadingDataGoogle(false);
 
                     } catch (innerError) {
-                        console.error('Error procesando datos de Drive:', innerError);
+                        //console.error('Error procesando datos de Drive:', innerError);
                         toast.error(MESSAGE_ES.errorunexpected, { position: 'bottom-center', duration: 3000 });
                         // Limpiar datos temporales en caso de error
                         chrome.storage.local.remove('temporaldrivepass');
@@ -157,7 +157,7 @@ const useDataDriveGoogle = () => {
                 }
             );
         } catch (error) {
-            console.error("Error conectando con Google Drive:", error);
+            //console.error("Error conectando con Google Drive:", error);
             toast.error(MESSAGE_ES.errorunexpected, { position: 'bottom-center', duration: 3000 });
             // Limpiar datos temporales en caso de error
             chrome.storage.local.remove('temporaldrivepass');

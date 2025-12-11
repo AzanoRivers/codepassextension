@@ -27,7 +27,7 @@ export const ModalPort = () => {
     const inputBlockPhraseRef = useRef(null);
     const fileInputRef = useRef(null);
     // [FUNCTIONS]
-    //const MODAL_ACTION = () => { console.log('Acción Modal Port') };
+    //const MODAL_ACTION = () => { //console.log('Acción Modal Port') };
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setImportSuccess(false);
@@ -76,7 +76,7 @@ export const ModalPort = () => {
     }, [setErrorStatus]);
     const onExportPasswords = () => {
         // Lógica para exportar passwords
-        // console.log('Exportando...');
+        //console.log('Exportando...');
         if (exportWithBlock) {
             if (!inputBlockPhrase) {
                 toast.error(MESSAGE_ES.modalport.errorblockphrase, { position: 'bottom-center', duration: 3000, });

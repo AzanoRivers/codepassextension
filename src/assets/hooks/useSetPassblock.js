@@ -14,7 +14,7 @@ const useSetPassblock = () => {
     }
     const setBlockPasswords = (pass) => {
         const TO_DO_ENCRYPT = async () => {
-            // console.log('TO_DO_ENCRYPT');
+            //console.log('TO_DO_ENCRYPT');
             
             // 1. Guardar blockpass cifrado
             const encrypted = await encryptWithPassphrase(pass, pass);
@@ -24,7 +24,7 @@ const useSetPassblock = () => {
             
             // 2. Derivar masterKey (SIN timeToken - determinista para Drive)
             const masterKey = await deriveMasterKey(pass);
-            // console.log('MasterKey derivada (determinista para Drive)');
+            //console.log('MasterKey derivada (determinista para Drive)');
             
             // Guardar masterKey para usar en sync durante la sesión
             chrome.storage.local.set({ 'masterkey': masterKey });
@@ -49,9 +49,9 @@ const useSetPassblock = () => {
                     },
                     (response) => {
                         if (response?.success) {
-                            // console.log('Passwords sincronizadas con blockpass a Drive');
+                            //console.log('Passwords sincronizadas con blockpass a Drive');
                         } else {
-                            console.error('Error sincronizando a Drive:', response?.error);
+                            //console.error('Error sincronizando a Drive:', response?.error);
                         }
                     }
                 );
@@ -59,9 +59,9 @@ const useSetPassblock = () => {
             
             // 4. Ahora cifrar passwords con temporalsesionpass para uso local
             const passwordsToEncrypt = [...dataCodePass.datapasswords];
-            // console.log('Cifrando passwords localmente');
+            //console.log('Cifrando passwords localmente');
             const encryptedPasswords = await go_to_encrypt({ passwords: passwordsToEncrypt, masterKey: temporalSessionPass });
-            // console.log('Passwords cifradas');
+            //console.log('Passwords cifradas');
             
             // 5. Guardar temporalsesionpass (para descifrar localmente)
             chrome.storage.local.set({ 'temporalsesionpass': temporalSessionPass });

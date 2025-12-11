@@ -29,7 +29,7 @@ function AppUi() {
         if (result?.accountToken && result?.timeToken && result?.codepassdata) {
           const NOW_UNIX_TIME = Math.floor(Date.now() / 1000);
           if (NOW_UNIX_TIME < result.timeToken) {
-            // console.log('LOGUEADO SESSION...');
+            //console.log('LOGUEADO SESSION...');
             setLogin(true);
           } else {
             // session expirada, limpiamos todo
@@ -41,7 +41,7 @@ function AppUi() {
                       chrome.storage.local.remove("temporalsesionpass", () => {
                         chrome.storage.local.remove("masterkey", () => {
                           resetContext();
-                          // console.log("Session disconnected");
+                          //console.log("Session disconnected");
                         });
                       });
                     });

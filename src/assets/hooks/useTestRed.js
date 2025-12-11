@@ -21,10 +21,10 @@ const useTestRed = () => {
             const isOnline = navigator.onLine;
             
             if (isOnline) {
-                // console.log('CONNECTED!');
+                //console.log('CONNECTED!');
                 setDataCodePass(data => ({ ...data, net: true, modalError: false }));
             } else {
-                console.warn('SIN CONEXIÓN');
+                //console.warn('SIN CONEXIÓN');
                 setDataCodePass(data => ({ ...data, net: false, modalError: true }));
             }
             
