@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             chrome.identity.launchWebAuthFlow(
                 {
                     url: "https://accounts.google.com/o/oauth2/auth" +
-                        "?client_id=506593573242-grsd3afb2s9vhkuuqua5vcksv8v0mc8v.apps.googleusercontent.com" +
+                        "?client_id=506593573242-haain28m31kl2hs8n20s1nqg8vk91oc2.apps.googleusercontent.com" +
                         "&response_type=token" +
                         "&scope=openid%20email%20profile%20https://www.googleapis.com/auth/drive" +
                         `&redirect_uri=${encodeURIComponent(redirectUri)}`,

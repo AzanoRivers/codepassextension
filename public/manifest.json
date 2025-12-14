@@ -2,10 +2,15 @@
     "manifest_version": 3,
     "name": "CodePass",
     "version": "1.0",
-    "description": "Simple and modern password management",
+    "description": "Secure password manager with Google Drive sync. Store and manage your passwords safely with encryption and automatic cloud backup.",
+    "homepage_url": "https://github.com/azanoRivers/codepass-extension",
     "permissions": [
         "storage",
         "identity"
+    ],
+    "host_permissions": [
+        "https://accounts.google.com/*",
+        "https://www.googleapis.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -27,5 +32,14 @@
     },
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self';"
+    },
+    "oauth2": {
+        "client_id": "506593573242-haain28m31kl2hs8n20s1nqg8vk91oc2.apps.googleusercontent.com",
+        "scopes": [
+            "openid",
+            "email",
+            "profile",
+            "https://www.googleapis.com/auth/drive"
+        ]
     }
 }
