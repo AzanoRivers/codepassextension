@@ -35,7 +35,7 @@ export function SelectView({ cancel, action }) {
                     navigator.clipboard.writeText(password).then(() => {
                         toast.success(MESSAGE_ES.display.copyPasswordOk, { position: 'bottom-center', duration: 1000, });
                     }).catch(err => {
-                        //console.log('Error en Copy', err);
+                        console.log('Error en Copy', err);
                     });
                 } else {
                     toast.error('Error en Copy', { position: 'bottom-center', duration: 2000, });

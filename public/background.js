@@ -1,30 +1,19 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.action) {
         case "login_with_google": {
-            // Obtener el ID real de la extensión dinámicamente
-            const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org`;
-            //console.log('🔑 Redirect URI:', redirectUri);
-            //console.log('🆔 Extension ID:', chrome.runtime.id);
-            
-            chrome.identity.launchWebAuthFlow(
-                {
-                    url: "https://accounts.google.com/o/oauth2/auth" +
-                        "?client_id=506593573242-haain28m31kl2hs8n20s1nqg8vk91oc2.apps.googleusercontent.com" +
-                        "&response_type=token" +
-                        "&scope=openid%20email%20profile%20https://www.googleapis.com/auth/drive.file" +
-                        `&redirect_uri=${encodeURIComponent(redirectUri)}`,
-                    interactive: true
-                },
-                (redirectUrl) => {
-                    if (chrome.runtime.lastError) {
-                        sendResponse({ success: false, error: chrome.runtime.lastError.message });
-                    } else {
-                        const urlParams = new URLSearchParams(new URL(redirectUrl).hash.substring(1));
-                        const accessToken = urlParams.get("access_token");
-                        sendResponse({ success: true, token: accessToken });
-                    }
+            // Usar getAuthToken que es el método nativo para extensiones con oauth2 en manifest
+            chrome.identity.getAuthToken({ interactive: true }, (token) => {
+                if (chrome.runtime.lastError) {
+                    //console.error('❌ Error en autenticación:', chrome.runtime.lastError.message);
+                    sendResponse({ success: false, error: chrome.runtime.lastError.message });
+                } else if (token) {
+                    //console.log('✅ Token obtenido exitosamente');
+                    sendResponse({ success: true, token: token });
+                } else {
+                    //console.error('❌ No se obtuvo token');
+                    sendResponse({ success: false, error: 'No se pudo obtener el token' });
                 }
-            );
+            });
             return true;
         }
         case "get_drive_files":

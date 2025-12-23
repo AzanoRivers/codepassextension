@@ -87,6 +87,8 @@ const CardPasswordBox = ({ name, pass, namekey, datablock }) => {
                     toast.success(MESSAGE_ES.display.copyPasswordOk, { position: 'bottom-center', duration: 1000, });
                 }).catch(err => {
                     //console.error("Error al copiar la contraseña:", err);
+                    console.log(err);
+                    
                 });
             });
         } else {

@@ -4,15 +4,15 @@
  * @returns {JSX.Element} Un elemento JSX(div) conteniendo el Logotipo CodePass
 */
 
-import { useLogin } from '@hooks/useLogin';
-import { useCodePass } from '@hooks/useCodePassData';
+//import { useLogin } from '@hooks/useLogin';
+//import { useCodePass } from '@hooks/useCodePassData';
 import PropTypes from 'prop-types';
 
 const LogoCodepass = ({ action }) => {
     const ON_ACTION = action || (() => { });
     // [HOOKS]
-    const [loginState] = useLogin();
-    const [dataCodePass] = useCodePass();
+    //const [loginState] = useLogin();
+    //const [dataCodePass] = useCodePass();
 
 
     const ACTION_TEST_DEV = () => {
