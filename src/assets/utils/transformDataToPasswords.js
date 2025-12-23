@@ -12,7 +12,29 @@ export const TRANSFORM_DATA_TO_PASSWORDS = (data) => {
                 continue;
             }
             const RANDOM_NAME = randomPhrase(6);
-            dataPass.push({ name: FIRST_SPLIT[index].split('@@-@@')[0], password: FIRST_SPLIT[index].split('@@-@@')[1], namekey: `${FIRST_SPLIT[index].split('@@-@@')[0]}-${RANDOM_NAME}` });
+            const parts = FIRST_SPLIT[index].split('@@-@@');
+            const name = parts[0];
+            const password = parts[1];
+            // Parsear la key 'block' si existe (formato: name@@-@@password##BL##block)
+            if (password && password.includes('##BL##')) {
+                const passwordParts = password.split('##BL##');
+                const actualPassword = passwordParts[0];
+                const blockValue = passwordParts[1];
+                dataPass.push({
+                    name,
+                    password: actualPassword,
+                    namekey: `${name}-${RANDOM_NAME}`,
+                    block: blockValue === 'true'
+                });
+            } else {
+                // Formato antiguo sin block, asumimos block = false
+                dataPass.push({
+                    name,
+                    password,
+                    namekey: `${name}-${RANDOM_NAME}`,
+                    block: false
+                });
+            }
         }
     } catch (error) {
         dataPass = 'ERROR RECUPERANDO DATOS';
@@ -26,7 +48,9 @@ export const TRANSFORM_DATA_TO_ENCODED = (dataPasswords = []) => {
     }
     let dataEncoded = '<---BEGIN--->CODEPASSEXTENSION<---BEGIN--->';
     dataPasswords.forEach((item, index) => {
-        dataEncoded += `@@@:::${item.name}@@-@@${item.password}:::`;
+        // Incluir la key 'block' en el formato: name@@-@@password##BL##block
+        const blockStatus = item.block !== undefined ? item.block : false;
+        dataEncoded += `@@@:::${item.name}@@-@@${item.password}##BL##${blockStatus}:::`;
         // Agregar separador entre passwords (excepto después de la última)
         if (index < dataPasswords.length - 1) {
             dataEncoded += '@@@';

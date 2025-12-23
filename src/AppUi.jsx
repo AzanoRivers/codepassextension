@@ -25,8 +25,10 @@ function AppUi() {
   useEffect(() => {
     if (loginState) return; // evita el loop si ya está logueado
     if (chrome?.storage?.local) {
-      chrome.storage.local.get(["accountToken", "timeToken", "codepassdata"], (result) => {
-        if (result?.accountToken && result?.timeToken && result?.codepassdata) {
+      chrome.storage.local.get(["accountToken", "timeToken"], (result) => {
+        // Solo requerimos accountToken y timeToken para restaurar sesión
+        // codepassdata puede no existir si el usuario es nuevo o Drive está vacío
+        if (result?.accountToken && result?.timeToken) {
           const NOW_UNIX_TIME = Math.floor(Date.now() / 1000);
           if (NOW_UNIX_TIME < result.timeToken) {
             //console.log('LOGUEADO SESSION...');
@@ -40,8 +42,12 @@ function AppUi() {
                     chrome.storage.local.remove("manualunblockpass", () => {
                       chrome.storage.local.remove("temporalsesionpass", () => {
                         chrome.storage.local.remove("masterkey", () => {
-                          resetContext();
-                          //console.log("Session disconnected");
+                          chrome.storage.local.remove("temporaldrivecontent", () => {
+                            chrome.storage.local.remove("temporaldrivepass", () => {
+                              resetContext();
+                              //console.log("Session disconnected");
+                            });
+                          });
                         });
                       });
                     });

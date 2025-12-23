@@ -87,6 +87,11 @@ const useToolsPassword = () => {
             return;
         }
         blockPassword({ namekey, status });
+
+        // Sincronizar con Drive después de bloquear/desbloquear
+        setTimeout(() => {
+            syncPasswordsToDrive();
+        }, 500);
     };
     const validateNotEmptyPassBlock = () => {
         const CONTEXT_PASS = getPassBlock();

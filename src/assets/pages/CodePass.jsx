@@ -25,7 +25,7 @@ import toast from "react-hot-toast";
 
 const CodePass = () => {
     // [STATES]
-    const { dataCodePass, updateAllPasswords, setPassBlock, setBlockPasswords, setManualUnblockPass, setOnDriveFile } = useContext(CodePassContext);
+    const { dataCodePass, updateAllPasswords, setPassBlock, setBlockPasswords, setManualUnblockPass, setOnDriveFile, setModalRequired } = useContext(CodePassContext);
     const [connect, setConnect] = useTestRed();
     const [skeleton, setSkeleton] = useState(true);
     const [showContent, setShowContent] = useState(false);
@@ -65,6 +65,30 @@ const CodePass = () => {
             setInputStatus(false);
         }
     }, [dataCodePass.blockpasswords]);
+
+    // [EFFECT] - Restaurar modal si hay archivo de Drive pendiente
+    useEffect(() => {
+        const checkPendingDriveFile = async () => {
+            try {
+                const { temporaldrivecontent } = await chrome.storage.local.get('temporaldrivecontent');
+
+                // Si hay contenido de Drive pendiente y el modal NO está activo
+                if (temporaldrivecontent && !dataCodePass.modalRequired) {
+                    //console.log('Detectado archivo de Drive pendiente, reactivando modal...');
+                    setOnDriveFile(true);
+                    setTimeout(() => {
+                        setModalRequired(true);
+                    }, 300);
+                }
+            } catch (error) {
+                //console.error('Error verificando archivo de Drive pendiente:', error);
+            }
+        };
+
+        // Solo ejecutar al montar el componente
+        checkPendingDriveFile();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Intencionalmente vacío: solo ejecutar al montar, no en cambios de dependencias
 
     // [EFFECT] - Procesar archivo de Drive cuando se cierra el modal
     const [wasModalOpen, setWasModalOpen] = useState(false);

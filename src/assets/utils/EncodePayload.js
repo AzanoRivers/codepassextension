@@ -107,8 +107,8 @@ export async function deriveMasterKey(blockPassword, additionalData = "") {
 }
 
 export const go_to_encrypt = async ({ passwords = [], masterKey = "" }) => {
-    // Test del array que llega: [{"name": "test","password": "A@@BhjrEdJjPXYb5Bi","namekey": "test-hYm64d"}]
-    // Estructura updatePasswords([{ name: inputRef.current.value, password: inputRefPass.current.value, namekey: `${inputRef.current.value}-${RANDOM_NAME}` }]);
+    // Test del array que llega: [{"name": "test","password": "A@@BhjrEdJjPXYb5Bi","namekey": "test-hYm64d", "block": false}]
+    // Estructura updatePasswords([{ name: inputRef.current.value, password: inputRefPass.current.value, namekey: `${inputRef.current.value}-${RANDOM_NAME}`, block: false }]);
     if (passwords.length < 1) {
         return [];
     }
@@ -124,7 +124,8 @@ export const go_to_encrypt = async ({ passwords = [], masterKey = "" }) => {
             encryptedPasswords.push({
                 name: pass.name,
                 password: encrypted,
-                namekey: pass.namekey
+                namekey: pass.namekey,
+                block: pass.block !== undefined ? pass.block : false  // Preservar la key block
             });
         }
         return encryptedPasswords;

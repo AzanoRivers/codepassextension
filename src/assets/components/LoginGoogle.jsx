@@ -13,9 +13,11 @@ import { ModalGeneric } from '@components/ModalGeneric';
 import { IconRobotX } from '@icons/IconRobotX';
 import toast from "react-hot-toast";
 
+const LIMIT_TIME_SESSION = 1; // MINUTES
+
+
 const LoginGoogle = () => {
     // [STATES]
-
     const [textLogin, setTextLogin] = useState(MESSAGE_ES.buttons.login);
     const [errorLogin, setErrorLogin] = useState(false);
     const refWaiting = useRef(false);
@@ -31,6 +33,13 @@ const LoginGoogle = () => {
         refWaiting.current = false;
     }
 
+    const handlePermissionError = () => {
+        // Callback llamado cuando hay error de permisos de Drive
+        refWaiting.current = false;
+        setErrorLogin(true);
+        setTextLogin(MESSAGE_ES.buttons.login);
+    };
+
     const loginWithGoogle = () => {
         if (refWaiting.current) {
             toast.error(MESSAGE_ES.error.googlemodal, { position: 'bottom-center', duration: 2000, });
@@ -45,18 +54,19 @@ const LoginGoogle = () => {
                     (response) => {
                         if ((response?.error !== '' && !response.success) || !response.token) {
                             //console.log(response);
-                            
+
                             toast.error(MESSAGE_ES.error.denegate, { position: 'bottom-center', duration: 3000, });
                             setErrorLogin(true);
                             setTextLogin(MESSAGE_ES.buttons.login);
                         } else {
                             if (response?.token) {
                                 const unixTimestamp = Math.floor(Date.now() / 1000);
-                                const futureTimestamp = unixTimestamp + 15 * 60; // 15 minutes
+                                const futureTimestamp = unixTimestamp + LIMIT_TIME_SESSION * 60; 
                                 chrome.storage.local.set({
                                     accountToken: response?.token, timeToken: futureTimestamp
                                 }, () => {
-                                    tryGetDataGoogleDrive();
+                                    // Pasar callback para manejar error de permisos
+                                    tryGetDataGoogleDrive(undefined, handlePermissionError);
                                 });
                             }
                         }

@@ -24,7 +24,7 @@ const useDataDriveGoogle = () => {
     const [, setLogin] = useLogin();
     const { updateAllPasswords, setPassBlock, setBlockPasswords, setManualUnblockPass, setModalRequired, setOnDriveFile } = useContext(CodePassContext);
     // [FUNCTIONS]
-    const tryGetDataGoogleDrive = useCallback(async (blockPhrase) => {
+    const tryGetDataGoogleDrive = useCallback(async (blockPhrase, onPermissionError) => {
         try {
             setIsLoadingDataGoogle(true);
             if (!chrome?.runtime) {
@@ -36,6 +36,20 @@ const useDataDriveGoogle = () => {
                 async (response) => {
                     try {
                         if (response?.error !== '' && !response.success) {
+                            // Detectar error de permisos insuficientes
+                            if (response.errorType === 'permissions' || response.error === 'INSUFFICIENT_PERMISSIONS') {
+                                //console.error('Permisos insuficientes de Drive');
+                                // Hacer logout automático
+                                chrome.runtime.sendMessage({ action: "logout_google" }, () => {
+                                    setLogin(false);
+                                    // Llamar al callback de error si existe
+                                    if (onPermissionError && typeof onPermissionError === 'function') {
+                                        onPermissionError();
+                                    }
+                                });
+                                setIsLoadingDataGoogle(false);
+                                return;
+                            }
                             //console.error('Error obteniendo datos de Drive:', response.error);
                             toast.error(MESSAGE_ES.errorunexpected, { position: 'bottom-center', duration: 3000 });
                             setIsLoadingDataGoogle(false);
@@ -118,28 +132,22 @@ const useDataDriveGoogle = () => {
                         } else {
                             // Archivo sin cifrar o vacío
                             const PASSWORDS_ARRAY = fileContent ? TRANSFORM_DATA_TO_PASSWORDS(fileContent) : [];
-                            
-                            if (PASSWORDS_ARRAY.length > 0) {
-                                // Actualizar passwords en contexto
-                                updateAllPasswords(PASSWORDS_ARRAY);
-                                
-                                // Guardar en storage local
-                                chrome.storage.local.set({ codepassdata: PASSWORDS_ARRAY });
-                                
-                                // No hay blockpass, así que blockpasswords debe ser false
-                                setBlockPasswords(false);
-                                setManualUnblockPass(true); // Marcar como desbloqueado manualmente
-                                chrome.storage.local.set({ 'manualunblockpass': true });
-                                chrome.storage.local.remove('blockdatapass');
-                                chrome.storage.local.remove('masterkey');
-                                chrome.storage.local.remove('temporalsesionpass');
-                            } else {
-                                // Archivo vacío - asegurarse de limpiar estados
-                                setBlockPasswords(false);
-                                setManualUnblockPass(true);
-                                chrome.storage.local.set({ 'manualunblockpass': true });
-                            }
-                            
+
+                            // Siempre actualizar passwords en contexto (aunque sea array vacío)
+                            updateAllPasswords(PASSWORDS_ARRAY);
+
+                            // Siempre guardar en storage local (aunque sea array vacío)
+                            // Esto asegura que la sesión se preserve correctamente
+                            chrome.storage.local.set({ codepassdata: PASSWORDS_ARRAY });
+
+                            // No hay blockpass, así que blockpasswords debe ser false
+                            setBlockPasswords(false);
+                            setManualUnblockPass(true); // Marcar como desbloqueado manualmente
+                            chrome.storage.local.set({ 'manualunblockpass': true });
+                            chrome.storage.local.remove('blockdatapass');
+                            chrome.storage.local.remove('masterkey');
+                            chrome.storage.local.remove('temporalsesionpass');
+
                             toast.success(MESSAGE_ES.buttons.connect, { position: 'bottom-center', duration: 3000 });
                         }
 

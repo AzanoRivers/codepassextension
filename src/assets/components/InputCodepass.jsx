@@ -88,7 +88,12 @@ const InputCodepass = ({ onFocus }) => {
         }
         activeAccept.current = true;
         const RANDOM_NAME = randomPhrase(6);
-        updatePasswords([{ name: inputRef.current.value, password: inputRefPass.current.value, namekey: `${inputRef.current.value}-${RANDOM_NAME}` }]);
+        updatePasswords([{
+            name: inputRef.current.value,
+            password: inputRefPass.current.value,
+            namekey: `${inputRef.current.value}-${RANDOM_NAME}`,
+            block: false  // Nueva password siempre empieza desbloqueada
+        }]);
         toast.success(MESSAGE_ES.display.createdok, { position: 'bottom-center', duration: 2000, });
         
         // Sincronizar con Drive después de crear password
