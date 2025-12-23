@@ -13,7 +13,7 @@ import { ModalGeneric } from '@components/ModalGeneric';
 import { IconRobotX } from '@icons/IconRobotX';
 import toast from "react-hot-toast";
 
-const LIMIT_TIME_SESSION = 1; // MINUTES
+const LIMIT_TIME_SESSION = 15; // MINUTES
 
 
 const LoginGoogle = () => {
