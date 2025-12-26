@@ -18,7 +18,7 @@ const findClosestDataPss = (element) => {
     return null;
 };
 
-export function SelectView({ cancel, action }) {
+export function SelectView({ cancel, action, encryptedPassword }) {
     // [STATES & REFS]
     const [password, setPassword] = useState('');
     const elementRef = useRef(null);
@@ -51,22 +51,32 @@ export function SelectView({ cancel, action }) {
 
     // [EFFECTS]
     useEffect(() => {
-        if (elementRef.current) {
-            const foundPassword = findClosestDataPss(elementRef.current);
-            // Desencriptamos la password antes de setearla
-            const decryptPassword = async (password) => {
-                try {
-                    const TIME_TOKEN = await chrome.storage.local.get('temporalsesionpass');
-                    const decrypted = await decryptWithPassphrase(password, TIME_TOKEN.temporalsesionpass);
-                    setPassword(decrypted || '');
-                } catch (error) {
-                    //console.log("Error decrypting password:", error);
-                    setPassword('');
+        // Desencriptamos la password recibida como prop
+        const decryptPassword = async (encryptedPwd) => {
+            try {
+                if (!encryptedPwd) {
+                    // Si no hay password cifrada como prop, intentar buscarla en el DOM (fallback)
+                    if (elementRef.current) {
+                        const foundPassword = findClosestDataPss(elementRef.current);
+                        encryptedPwd = foundPassword;
+                    }
                 }
-            };
-            decryptPassword(foundPassword || '');
-        }
-    }, []);
+                
+                if (!encryptedPwd) {
+                    setPassword('');
+                    return;
+                }
+                
+                const TIME_TOKEN = await chrome.storage.local.get('temporalsesionpass');
+                const decrypted = await decryptWithPassphrase(encryptedPwd, TIME_TOKEN.temporalsesionpass);
+                setPassword(decrypted || '');
+            } catch (error) {
+                //console.log("Error decrypting password:", error);
+                setPassword('');
+            }
+        };
+        decryptPassword(encryptedPassword || '');
+    }, [encryptedPassword]);
 
     // [RENDER]
     return (
@@ -87,4 +97,5 @@ export function SelectView({ cancel, action }) {
 SelectView.propTypes = {
     cancel: PropTypes.func,
     action: PropTypes.func,
+    encryptedPassword: PropTypes.string,
 };

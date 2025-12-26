@@ -222,7 +222,7 @@ const CardPasswordBox = ({ name, pass, namekey, datablock }) => {
                             <IconLock className="h-6 w-6 white-1 iconAction iconLock hover:scale-[80%]" action={onClickIcon} />
                             {/* <IconEye className="h-6 w-6 white-1 iconAction iconEye hover:scale-90" action={onClickIcon} /> */}
                             {confirmView
-                                ? <SelectView cancel={() => setViewConfirmation(false)} />
+                                ? <SelectView cancel={() => setViewConfirmation(false)} encryptedPassword={PSS} />
                                 : <IconEye className="h-6 w-6 white-1 iconAction iconEye hover:scale-90" action={onClickIcon} />
                             }
                             {confirmEdit

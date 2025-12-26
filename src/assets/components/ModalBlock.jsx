@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { InputGeneric } from '@components/InputGeneric';
 import { ButtonGeneric } from '@components/ButtonGeneric'
 import { IconRobotHappy } from '@icons/IconRobotHappy';
@@ -9,6 +9,7 @@ import { useModalBlockpass } from '@hooks/useModalBlockpass';
 import { useSetPassblock } from '@hooks/useSetPassblock';
 import { decryptWithPassphrase, deriveMasterKey } from "@utils/EncodePayload.js";
 import { MESSAGE_ES } from '@utils/Message';
+import { CodePassContext } from '@contexts/CodepassContext';
 
 const GO_TO_ENCRYPT_REMOVE = async (valuepass, shouldCreateKey) => {
     try {
@@ -16,18 +17,25 @@ const GO_TO_ENCRYPT_REMOVE = async (valuepass, shouldCreateKey) => {
             // Desbloquear: Crear/actualizar temporalsesionpass y masterKey
             const TIME_TOKEN = await chrome.storage.local.get('timeToken');
             const encrypted = await deriveMasterKey(valuepass, TIME_TOKEN.timeToken.toString());
-            chrome.storage.local.set({ 'temporalsesionpass': encrypted });
             
             // Derivar masterKey (sin timeToken) para Drive sync
             const masterKey = await deriveMasterKey(valuepass);
-            chrome.storage.local.set({ 'masterkey': masterKey });
+            
+            // Guardar con promesas para asegurar que se completen
+            await new Promise((resolve) => {
+                chrome.storage.local.set({ 
+                    'temporalsesionpass': encrypted,
+                    'masterkey': masterKey 
+                }, resolve);
+            });
         } else {
             // Bloquear: Eliminar temporalsesionpass y masterkey
-            chrome.storage.local.remove('temporalsesionpass');
-            chrome.storage.local.remove('masterkey');
+            await new Promise((resolve) => {
+                chrome.storage.local.remove(['temporalsesionpass', 'masterkey'], resolve);
+            });
         }
     } catch (error) {
-        //console.log("Error encrypting block password:", error);
+        //console.error("Error en GO_TO_ENCRYPT_REMOVE:", error);
     }
 };
 
@@ -40,6 +48,7 @@ export const ModalBlock = () => {
     const [showInputError, setShowInputError] = useState(false);
     const [errorPassBlock, setErrorPassBlock] = useState(false);
     const { setBlockPasswords, blockpass } = useSetPassblock();
+    const { dataCodePass } = useContext(CodePassContext);
     const inputRefOne = useRef(null);
     const inputRefTwo = useRef(null);
     // [FUNCTIONS]
@@ -70,9 +79,12 @@ export const ModalBlock = () => {
                 const decrypted = await decryptWithPassphrase(blockpass, inputValue3);
                 const isValid = inputValue3 === decrypted;
                 if (isValid) {
-                    // Si showpasswords es false, estamos desbloqueando (crear key)
-                    // Si showpasswords es true, estamos bloqueando (eliminar key)
-                    GO_TO_ENCRYPT_REMOVE(inputValue3, !showpasswords);
+                    // Si blockpasswords es true, estamos desbloqueando (crear keys)
+                    // Si blockpasswords es false, estamos bloqueando (eliminar keys)
+                    const shouldCreateKeys = dataCodePass.blockpasswords;
+                    
+                    await GO_TO_ENCRYPT_REMOVE(inputValue3, shouldCreateKeys);
+                    
                     toggleModalLock();
                     setInputValue3('');
                     setErrorPassBlock(false);

@@ -68,29 +68,38 @@ export async function encryptWithPassphrase(plaintext, passphrase) {
 }
 
 export async function decryptWithPassphrase(payloadBase64, passphrase) {
-    // Verificamos que exista en chrome.storage.loca temporalsesionpass si no existe solo devuelve el payloadBase64
+    // Verificamos que exista en chrome.storage.local temporalsesionpass si no existe solo devuelve el payloadBase64
     const datatemporalsesion = await chrome.storage.local.get('temporalsesionpass');
     const blockdatapass = await chrome.storage.local.get('blockdatapass');
+    
     if (!datatemporalsesion.temporalsesionpass && !blockdatapass.blockdatapass) {
         return payloadBase64;
     }
-    const data = b64decode(payloadBase64);
-    const version = data[0];
-    if (version !== VERSION) return ("Formato/versión no soportado");
+    
+    try {
+        const data = b64decode(payloadBase64);
+        const version = data[0];
+        if (version !== VERSION) {
+            return payloadBase64;
+        }
 
-    const salt = data.slice(1, 1 + SALT_BYTES);
-    const iv = data.slice(1 + SALT_BYTES, 1 + SALT_BYTES + IV_BYTES);
-    const ct = data.slice(1 + SALT_BYTES + IV_BYTES);
+        const salt = data.slice(1, 1 + SALT_BYTES);
+        const iv = data.slice(1 + SALT_BYTES, 1 + SALT_BYTES + IV_BYTES);
+        const ct = data.slice(1 + SALT_BYTES + IV_BYTES);
 
-    const key = await deriveKey(passphrase, salt);
+        const key = await deriveKey(passphrase, salt);
 
-    const plainBuf = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv },
-        key,
-        ct
-    );
+        const plainBuf = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            ct
+        );
 
-    return td.decode(plainBuf);
+        return td.decode(plainBuf);
+    } catch (error) {
+        // Si falla el b64decode o el descifrado, probablemente ya es texto plano
+        return payloadBase64;
+    }
 }
 
 /**
@@ -114,10 +123,12 @@ export const go_to_encrypt = async ({ passwords = [], masterKey = "" }) => {
     }
     try {
         const datatemporalsesion = await chrome.storage.local.get('temporalsesionpass');
+        
         if (!datatemporalsesion.temporalsesionpass && masterKey.trim() === "") {
             return passwords;
         }
         const passphrase = datatemporalsesion.temporalsesionpass || masterKey;
+        
         const encryptedPasswords = [];
         for (const pass of passwords) {
             const encrypted = await encryptWithPassphrase(pass.password, passphrase);
@@ -130,7 +141,7 @@ export const go_to_encrypt = async ({ passwords = [], masterKey = "" }) => {
         }
         return encryptedPasswords;
     } catch (error) {
-        //console.log("Error encrypting block password:", error);
+        //console.log("Error encrypting passwords:", error);
         return [];
     }
 };

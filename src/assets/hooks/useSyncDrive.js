@@ -52,12 +52,9 @@ const useSyncDrive = (context = null) => {
             const { codepassdata } = await chrome.storage.local.get('codepassdata');
             const currentPasswords = codepassdata || [];
 
-            // Verificar que hay passwords para sincronizar
-            if (currentPasswords.length === 0) {
-                //console.log('No hay passwords para sincronizar');
-                setIsSyncing(false);
-                return false;
-            }
+            // NOTA: No retornamos si currentPasswords.length === 0
+            // Debemos sincronizar incluso con array vacío para actualizar Drive correctamente
+            // cuando se eliminan todas las contraseñas
 
             // Verificar si hay blockpass configurado
             const { temporalsesionpass, blockdatapass } = await chrome.storage.local.get(['temporalsesionpass', 'blockdatapass']);
